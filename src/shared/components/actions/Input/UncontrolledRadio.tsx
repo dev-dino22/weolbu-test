@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 type RadioGroupProps = {
   children: React.ReactNode;
   legend?: string;
+  errorMessage?: string;
 };
 
 type RadioButtonProps = {
@@ -11,11 +12,18 @@ type RadioButtonProps = {
   children: React.ReactNode;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
-export function RadioGroup({ children, legend }: RadioGroupProps) {
+export function RadioGroup({
+  children,
+  legend,
+  errorMessage = '',
+}: RadioGroupProps) {
   return (
     <S.Fieldset role="radiogroup">
       {legend && <S.Legend>{legend}</S.Legend>}
       <S.RadioList>{children}</S.RadioList>
+      <S.ErrorMessage role="alert" aria-live="assertive">
+        {errorMessage}
+      </S.ErrorMessage>
     </S.Fieldset>
   );
 }
@@ -37,8 +45,9 @@ export function RadioButton({
 const S = {
   Fieldset: styled.fieldset`
     width: 100%;
-
-    padding: ${({ theme }) => theme.PADDING.p4};
+    display: flex;
+    flex-direction: column;
+    gap: ${({ theme }) => theme.GAP.level3};
   `,
 
   Legend: styled.legend`
@@ -108,5 +117,12 @@ const S = {
     font: ${({ theme }) => theme.FONTS.body.medium};
 
     transition: all 0.2s ease;
+  `,
+
+  ErrorMessage: styled.p`
+    height: 14px;
+
+    color: ${({ theme }) => theme.PALETTE.red[40]};
+    font: ${({ theme }) => theme.FONTS.body.xxsmall};
   `,
 };

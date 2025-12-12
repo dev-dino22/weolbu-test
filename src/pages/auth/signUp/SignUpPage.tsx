@@ -5,35 +5,144 @@ import {
   RadioGroup,
 } from '@components/actions/Input/UncontrolledRadio';
 import styled from '@emotion/styled';
-import { useForm } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router';
+import { ROUTE_PATH } from '@routes/routePath';
+import { useShowToast } from '@components/toast/ToastProvider';
+
+type SignUpFormData = {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+  userType: 'student' | 'instructor';
+};
 
 function SignUpPage() {
-  const { register, handleSubmit } = useForm();
+  const navigate = useNavigate();
+  const showToast = useShowToast();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpFormData>({
+    mode: 'onChange',
+  });
+
+  const onSubmit: SubmitHandler<SignUpFormData> = async data => {
+    try {
+      // TODO: API 호출로 실제 회원가입 처리
+      console.log('회원가입 데이터:', data);
+
+      // 회원가입 완료 후 강의 목록(메인)으로 이동
+      showToast({ mode: 'SUCCESS', message: '회원가입이 완료되었습니다!' });
+      navigate(ROUTE_PATH.MAIN);
+    } catch (error) {
+      // TODO: API 호출 실패 시 에러 처리
+      console.error('회원가입 실패:', error);
+      showToast({
+        mode: 'ERROR',
+        message: '회원가입에 실패했습니다. 다시 시도해주세요.',
+      });
+    }
+  };
+
+  const validatePassword = (value: string) => {
+    if (value.length < 6 || value.length > 10) {
+      return '비밀번호는 6자 이상 10자 이하여야 합니다';
+    }
+
+    const hasLowerCase = /[a-z]/.test(value);
+    const hasUpperCase = /[A-Z]/.test(value);
+    const hasNumber = /[0-9]/.test(value);
+
+    const combinationCount = [hasLowerCase, hasUpperCase, hasNumber].filter(
+      Boolean
+    ).length;
+
+    if (combinationCount < 2) {
+      return '영문 소문자, 대문자, 숫자 중 최소 2가지 이상 조합이 필요합니다';
+    }
+
+    return true;
+  };
+
   return (
     <S.Container>
       <S.Title>회원 가입</S.Title>
-      <S.Form onSubmit={handleSubmit(data => console.log(data))}>
-        <UncontrolledInput label="이름" placeholder="김월부" />
+      <S.Form onSubmit={handleSubmit(onSubmit)}>
+        <UncontrolledInput
+          label="이름"
+          placeholder="김월부"
+          required
+          error={!!errors.name}
+          feedbackMessage={errors.name?.message}
+          {...register('name', {
+            required: '이름을 입력해주세요',
+            minLength: {
+              value: 2,
+              message: '이름은 최소 2자 이상이어야 합니다',
+            },
+          })}
+        />
         <UncontrolledInput
           label="이메일"
           placeholder="abc@weolbu.com"
           type="email"
+          required
+          error={!!errors.email}
+          feedbackMessage={errors.email?.message}
+          {...register('email', {
+            required: '이메일을 입력해주세요',
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: '올바른 이메일 형식이 아닙니다',
+            },
+          })}
         />
         <UncontrolledInput
           label="휴대폰 번호"
           placeholder="010-1234-5678"
           type="tel"
+          required
+          error={!!errors.phone}
+          feedbackMessage={errors.phone?.message}
+          {...register('phone', {
+            required: '휴대폰 번호를 입력해주세요',
+            pattern: {
+              value: /^01[0-9]-?[0-9]{3,4}-?[0-9]{4}$/,
+              message: '올바른 휴대폰 번호 형식이 아닙니다 (예: 010-1234-5678)',
+            },
+          })}
         />
         <UncontrolledInput
           label="비밀번호"
-          placeholder="영문, 숫자, 특수문자 포함 8자 이상"
+          placeholder="6~10자, 영문/숫자 조합"
+          maxLength={10}
           type="password"
+          required
+          error={!!errors.password}
+          feedbackMessage={errors.password?.message}
+          {...register('password', {
+            required: '비밀번호를 입력해주세요',
+            validate: validatePassword,
+          })}
         />
         <RadioGroup legend="수강 신청 유형">
-          <RadioButton value="student" {...register('userType')}>
+          <RadioButton
+            value="student"
+            {...register('userType', {
+              required: '회원 유형을 선택해주세요',
+            })}
+          >
             수강생
           </RadioButton>
-          <RadioButton value="instructor" {...register('userType')}>
+          <RadioButton
+            value="instructor"
+            {...register('userType', {
+              required: '회원 유형을 선택해주세요',
+            })}
+          >
             강사
           </RadioButton>
         </RadioGroup>
@@ -71,6 +180,6 @@ const S = {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: ${({ theme }) => theme.GAP.level6};
+    gap: ${({ theme }) => theme.GAP.level2};
   `,
 };

@@ -9,15 +9,18 @@ import { Global, ThemeProvider } from '@emotion/react';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router';
 import Main from '@pages/main/MainPage';
 import SignUpPage from '@pages/auth/signUp/SignUpPage';
+import ToastProvider from '@components/toast/ToastProvider';
 
 function Wrapper() {
   return (
     <>
       <Global styles={reset} />
       <ThemeProvider theme={THEME}>
-        <Layout>
-          <Outlet />
-        </Layout>
+        <ToastProvider>
+          <Layout>
+            <Outlet />
+          </Layout>
+        </ToastProvider>
       </ThemeProvider>
     </>
   );

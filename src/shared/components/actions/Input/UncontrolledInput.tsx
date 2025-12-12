@@ -1,22 +1,21 @@
 import styled from '@emotion/styled';
-import { type ComponentProps, type ReactNode, useId, type Ref } from 'react';
+import { type ComponentProps, type ReactNode, useId } from 'react';
 
 type Props = {
   label?: string;
   color?: string;
   feedbackMessage?: ReactNode;
   error?: boolean;
-  ref?: Ref<HTMLInputElement>;
 } & ComponentProps<'input'>;
 
 function UncontrolledInput({
+  ref,
   placeholder = '입력해 주세요.',
   required,
   label,
   color,
-  feedbackMessage,
+  feedbackMessage = '',
   error = false,
-  ref,
   ...props
 }: Props) {
   const inputId = useId();
@@ -39,12 +38,12 @@ function UncontrolledInput({
           {...props}
         />
       </S.InputWrapper>
-      {feedbackMessage && (
-        <S.FeedbackMessage error={error}>{feedbackMessage}</S.FeedbackMessage>
-      )}
+      <S.FeedbackMessage error={error}>{feedbackMessage}</S.FeedbackMessage>
     </S.Container>
   );
 }
+
+UncontrolledInput.displayName = 'UncontrolledInput';
 
 export default UncontrolledInput;
 
@@ -113,10 +112,12 @@ const S = {
     }
   `,
   FeedbackMessage: styled.div<{ error: boolean }>`
+    height: 14px;
+
     padding-left: ${({ theme }) => theme.PADDING.p4};
 
     color: ${({ theme, error }) =>
       error ? theme.PALETTE.red[40] : theme.PALETTE.gray[20]};
-    font: ${({ theme }) => theme.FONTS.body.xsmall};
+    font: ${({ theme }) => theme.FONTS.body.xxsmall};
   `,
 };
