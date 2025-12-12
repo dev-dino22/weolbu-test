@@ -9,13 +9,15 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { ROUTE_PATH } from '@routes/routePath';
 import { useShowToast } from '@components/toast/ToastProvider';
+import { users } from '@apis/users';
+import { ApiError } from '@apis/apiClient';
 
 type SignUpFormData = {
   name: string;
   email: string;
   phone: string;
   password: string;
-  userType: 'student' | 'instructor';
+  userType: 'STUDENT' | 'INSTRUCTOR';
 };
 
 function SignUpPage() {
@@ -31,25 +33,44 @@ function SignUpPage() {
 
   const onSubmit: SubmitHandler<SignUpFormData> = async data => {
     try {
-      // TODO: API 호출로 실제 회원가입 처리
-      console.log('회원가입 데이터:', data);
+      await users.postSignUp({
+        email: data.email,
+        password: data.password,
+        name: data.name,
+        phone: data.phone,
+        role: data.userType,
+      });
 
-      // 회원가입 완료 후 강의 목록(메인)으로 이동
-      showToast({ mode: 'SUCCESS', message: '회원가입이 완료되었습니다!' });
+      showToast({
+        mode: 'SUCCESS',
+        message: '회원가입이 완료되었습니다!',
+      });
+      // TODO: 강의 목록 페이지로 이동
       navigate(ROUTE_PATH.MAIN);
     } catch (error) {
-      // TODO: API 호출 실패 시 에러 처리
-      console.error('회원가입 실패:', error);
-      showToast({
-        mode: 'ERROR',
-        message: '회원가입에 실패했습니다. 다시 시도해주세요.',
-      });
+      if (error instanceof ApiError && error.body) {
+        const errorMessage = (error.body as { message?: string }).message;
+        showToast({
+          mode: 'ERROR',
+          message: errorMessage || '회원가입에 실패했습니다.',
+        });
+      } else {
+        showToast({
+          mode: 'ERROR',
+          message: '회원가입에 실패했습니다. 다시 시도해주세요.',
+        });
+      }
     }
   };
 
   const validatePassword = (value: string) => {
     if (value.length < 6 || value.length > 10) {
       return '비밀번호는 6자 이상 10자 이하여야 합니다';
+    }
+
+    const hasSpecialChar = /[^a-zA-Z0-9]/.test(value);
+    if (hasSpecialChar) {
+      return '비밀번호는 영문과 숫자만 사용할 수 있습니다';
     }
 
     const hasLowerCase = /[a-z]/.test(value);
@@ -130,7 +151,7 @@ function SignUpPage() {
         />
         <RadioGroup legend="수강 신청 유형">
           <RadioButton
-            value="student"
+            value="STUDENT"
             {...register('userType', {
               required: '회원 유형을 선택해주세요',
             })}
@@ -138,7 +159,7 @@ function SignUpPage() {
             수강생
           </RadioButton>
           <RadioButton
-            value="instructor"
+            value="INSTRUCTOR"
             {...register('userType', {
               required: '회원 유형을 선택해주세요',
             })}
