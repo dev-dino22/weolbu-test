@@ -10,6 +10,8 @@ import { createBrowserRouter, Outlet, RouterProvider } from 'react-router';
 import Main from '@pages/main/MainPage';
 import SignUpPage from '@pages/auth/signUp/SignUpPage';
 import ToastProvider from '@components/toast/ToastProvider';
+import LoginPage from '@pages/auth/login/LoginPage';
+import { AuthProvider } from '@domains/auth/login/context/AuthProvider';
 
 function Wrapper() {
   return (
@@ -17,9 +19,11 @@ function Wrapper() {
       <Global styles={reset} />
       <ThemeProvider theme={THEME}>
         <ToastProvider>
-          <Layout>
-            <Outlet />
-          </Layout>
+          <AuthProvider>
+            <Layout>
+              <Outlet />
+            </Layout>
+          </AuthProvider>
         </ToastProvider>
       </ThemeProvider>
     </>
@@ -32,6 +36,7 @@ const routes = createBrowserRouter([
     children: [
       { path: ROUTE_PATH.MAIN, Component: Main },
       { path: ROUTE_PATH.SIGN_UP, Component: SignUpPage },
+      { path: ROUTE_PATH.LOGIN, Component: LoginPage },
     ],
   },
 ]);
