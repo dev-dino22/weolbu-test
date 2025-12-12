@@ -41,10 +41,16 @@ function SignUpPage() {
         role: data.userType,
       });
 
+      await users.postLogin({
+        email: data.email,
+        password: data.password,
+      });
+
       showToast({
         mode: 'SUCCESS',
         message: '회원가입이 완료되었습니다!',
       });
+
       // TODO: 강의 목록 페이지로 이동
       navigate(ROUTE_PATH.MAIN);
     } catch (error) {
