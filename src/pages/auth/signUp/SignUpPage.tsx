@@ -63,6 +63,8 @@ function SignUpPage() {
     }
   };
 
+  // TODO: 리팩토링 함수분리
+
   const validatePassword = (value: string) => {
     if (value.length < 6 || value.length > 10) {
       return '비밀번호는 6자 이상 10자 이하여야 합니다';
@@ -86,6 +88,23 @@ function SignUpPage() {
     }
 
     return true;
+  };
+
+  const formatPhoneNumber = (value: string) => {
+    const numbers = value.replace(/[^\d]/g, '');
+
+    const limitedNumbers = numbers.slice(0, 11);
+
+    if (limitedNumbers.length <= 3) {
+      return limitedNumbers;
+    } else if (limitedNumbers.length <= 7) {
+      return `${limitedNumbers.slice(0, 3)}-${limitedNumbers.slice(3)}`;
+    } else {
+      return `${limitedNumbers.slice(0, 3)}-${limitedNumbers.slice(
+        3,
+        7
+      )}-${limitedNumbers.slice(7)}`;
+    }
   };
 
   return (
@@ -131,8 +150,11 @@ function SignUpPage() {
           {...register('phone', {
             required: '휴대폰 번호를 입력해주세요',
             pattern: {
-              value: /^01[0-9]-?[0-9]{3,4}-?[0-9]{4}$/,
+              value: /^01[0-9]-[0-9]{3,4}-[0-9]{4}$/,
               message: '올바른 휴대폰 번호 형식이 아닙니다 (예: 010-1234-5678)',
+            },
+            onChange: e => {
+              e.target.value = formatPhoneNumber(e.target.value);
             },
           })}
         />
