@@ -146,10 +146,10 @@ function SignUpPage() {
             강사
           </RadioButton>
         </RadioGroup>
+        <Button type="submit" size="lg">
+          회원 가입
+        </Button>
       </S.Form>
-      <Button type="submit" size="lg">
-        회원 가입
-      </Button>
     </S.Container>
   );
 }
