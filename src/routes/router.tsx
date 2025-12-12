@@ -7,7 +7,8 @@ import reset from '@styles/reset';
 
 import { Global, ThemeProvider } from '@emotion/react';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router';
-import Main from '@pages/Main';
+import Main from '@pages/main/MainPage';
+import SignUpPage from '@pages/auth/signUp/SignUpPage';
 
 function Wrapper() {
   return (
@@ -25,7 +26,10 @@ function Wrapper() {
 const routes = createBrowserRouter([
   {
     Component: Wrapper,
-    children: [{ path: ROUTE_PATH.MAIN, Component: Main }],
+    children: [
+      { path: ROUTE_PATH.MAIN, Component: Main },
+      { path: ROUTE_PATH.SIGN_UP, Component: SignUpPage },
+    ],
   },
 ]);
 

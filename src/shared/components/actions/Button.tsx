@@ -34,7 +34,7 @@ const S = {
 
     background-color: ${({ theme }) => theme.PALETTE.primary[50]};
 
-    color: ${({ theme }) => theme.PALETTE.gray[100]};
+    color: ${({ theme }) => theme.PALETTE.gray[0]};
     font: ${({ size }) => SIZE[size].font};
 
     border-radius: ${({ theme }) => theme.RADIUS.small};
