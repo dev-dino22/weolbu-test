@@ -51,8 +51,7 @@ function SignUpPage() {
         message: '회원가입이 완료되었습니다!',
       });
 
-      // TODO: 강의 목록 페이지로 이동
-      navigate(ROUTE_PATH.MAIN);
+      navigate(ROUTE_PATH.COURSE_LIST);
     } catch (error) {
       if (error instanceof ApiError && error.body) {
         const errorMessage = (error.body as { message?: string }).message;
