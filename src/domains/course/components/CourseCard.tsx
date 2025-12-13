@@ -3,9 +3,12 @@ import styled from '@emotion/styled';
 
 type Props = {
   course: Course;
+  isCheckable?: boolean;
+  isChecked?: boolean;
+  onCheckChange?: (courseId: number, checked: boolean) => void;
 };
 
-function CourseCard({ course }: Props) {
+function CourseCard({ course, isCheckable, isChecked, onCheckChange }: Props) {
   const {
     id,
     title,
@@ -13,10 +16,8 @@ function CourseCard({ course }: Props) {
     instructorName,
     maxStudents,
     currentStudents,
-    availableSeats,
     isFull,
     price,
-    createdAt,
   } = course;
 
   const formatPrice = (price: number) => {
@@ -25,33 +26,45 @@ function CourseCard({ course }: Props) {
 
   return (
     <S.Container>
-      <S.Header>
-        <S.Title>
-          {isFull && <S.FullBadge>마감</S.FullBadge>}
-          {title}
-        </S.Title>
-        <S.HeaderRight>
-          <S.Price>{formatPrice(price)}원</S.Price>
-        </S.HeaderRight>
-      </S.Header>
+      {isCheckable && (
+        <S.CheckboxWrapper>
+          <S.Checkbox
+            type="checkbox"
+            checked={isChecked}
+            onChange={e => onCheckChange?.(id, e.target.checked)}
+            disabled={isFull}
+          />
+        </S.CheckboxWrapper>
+      )}
+      <S.Wrapper>
+        <S.Header>
+          <S.Title>
+            {isFull && <S.FullBadge>마감</S.FullBadge>}
+            {title}
+          </S.Title>
+          <S.HeaderRight>
+            <S.Price>{formatPrice(price)}원</S.Price>
+          </S.HeaderRight>
+        </S.Header>
 
-      {description && <S.Description>{description}</S.Description>}
+        {description && <S.Description>{description}</S.Description>}
 
-      <S.InfoSection>
-        <S.InfoBox>
-          <S.InfoLabel>강사</S.InfoLabel>
-          <S.InfoValue>{instructorName}</S.InfoValue>
-        </S.InfoBox>
+        <S.InfoSection>
+          <S.InfoBox>
+            <S.InfoLabel>강사</S.InfoLabel>
+            <S.InfoValue>{instructorName}</S.InfoValue>
+          </S.InfoBox>
 
-        <S.InfoBox>
-          <S.InfoLabel>수강 인원</S.InfoLabel>
-          <S.InfoValue>
-            <S.CurrentStudents>{currentStudents}</S.CurrentStudents>
-            <S.Separator>/</S.Separator>
-            <S.MaxStudents>{maxStudents}명</S.MaxStudents>
-          </S.InfoValue>
-        </S.InfoBox>
-      </S.InfoSection>
+          <S.InfoBox>
+            <S.InfoLabel>수강 인원</S.InfoLabel>
+            <S.InfoValue>
+              <S.CurrentStudents>{currentStudents}</S.CurrentStudents>
+              <S.Separator>/</S.Separator>
+              <S.MaxStudents>{maxStudents}명</S.MaxStudents>
+            </S.InfoValue>
+          </S.InfoBox>
+        </S.InfoSection>
+      </S.Wrapper>
     </S.Container>
   );
 }
@@ -62,9 +75,17 @@ const S = {
   Container: styled.div`
     width: 100%;
     display: flex;
+    align-items: center;
+    gap: ${({ theme }) => theme.GAP.level4};
+  `,
+
+  Wrapper: styled.div`
+    width: 100%;
+    display: flex;
     flex-direction: column;
     gap: ${({ theme }) => theme.GAP.level5};
     justify-content: space-between;
+    position: relative;
 
     padding: ${({ theme }) => theme.PADDING.p6};
 
@@ -158,5 +179,18 @@ const S = {
   Price: styled.span`
     color: ${({ theme }) => theme.PALETTE.primary[60]};
     font: ${({ theme }) => theme.FONTS.body.large_bold};
+  `,
+
+  CheckboxWrapper: styled.div``,
+
+  Checkbox: styled.input`
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
   `,
 };
