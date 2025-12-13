@@ -16,6 +16,7 @@ import CourseCreatePage from '@pages/course/CourseCreatePage';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@apis/queryClient';
 import CourseEnrollPage from '@pages/course/CourseEnrollPage';
+import Header from '@widgets/Header';
 
 function Wrapper() {
   return (
@@ -26,6 +27,7 @@ function Wrapper() {
           <ToastProvider>
             <AuthProvider>
               <Layout>
+                <Header />
                 <Outlet />
               </Layout>
             </AuthProvider>

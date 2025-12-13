@@ -71,7 +71,7 @@ function CourseCreatePage() {
       <S.Form onSubmit={handleSubmit(onSubmit)}>
         <UncontrolledInput
           label="강의명"
-          placeholder="너나위의 내집마련 기초반"
+          placeholder="React 기초 마스터"
           required
           error={!!errors.title}
           feedbackMessage={errors.title?.message}
@@ -89,7 +89,7 @@ function CourseCreatePage() {
         />
         <UncontrolledInput
           label="강의 설명"
-          placeholder="강의에 대한 설명을 입력해주세요"
+          placeholder="React의 기본 개념부터 Hooks까지 배웁니다."
           error={!!errors.description}
           feedbackMessage={errors.description?.message}
           {...register('description', {
@@ -101,7 +101,7 @@ function CourseCreatePage() {
         />
         <UncontrolledInput
           label="강사명"
-          placeholder="홍길동"
+          placeholder="김강사"
           required
           error={!!errors.instructorName}
           feedbackMessage={errors.instructorName?.message}
@@ -115,7 +115,7 @@ function CourseCreatePage() {
         />
         <UncontrolledInput
           label="최대 수강 인원"
-          placeholder="10"
+          placeholder="30"
           type="number"
           required
           error={!!errors.maxStudents}
@@ -135,7 +135,7 @@ function CourseCreatePage() {
         />
         <UncontrolledInput
           label="가격 (원)"
-          placeholder="200,000"
+          placeholder="100,000"
           type="text"
           required
           error={!!errors.price}
@@ -186,16 +186,14 @@ export default CourseCreatePage;
 const S = {
   Container: styled.div`
     width: 100%;
-    height: 100%;
-    min-height: 100vh;
-
     display: flex;
     flex-direction: column;
     align-items: center;
 
     gap: ${({ theme }) => theme.GAP.level8};
 
-    padding: ${({ theme }) => theme.PADDING.p8};
+    padding: ${({ theme }) => theme.LAYOUT.headerHeight}
+      ${({ theme }) => theme.PADDING.p8};
 
     background-color: ${({ theme }) => theme.PALETTE.gray[0]};
   `,
@@ -208,7 +206,7 @@ const S = {
     max-width: 600px;
     display: flex;
     flex-direction: column;
-    gap: ${({ theme }) => theme.GAP.level6};
+    gap: ${({ theme }) => theme.GAP.level2};
   `,
   ButtonGroup: styled.div`
     display: flex;
