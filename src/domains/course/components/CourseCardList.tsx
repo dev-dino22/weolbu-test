@@ -1,0 +1,155 @@
+import styled from '@emotion/styled';
+import CourseCard from './CourseCard';
+import { coursesQuery, type CourseListParams } from '@apis/courses';
+import { useNavigate } from 'react-router';
+import { ROUTE_PATH } from '@routes/routePath';
+
+type Props = {
+  params?: CourseListParams;
+};
+
+function CourseCardList({ params }: Props) {
+  const navigate = useNavigate();
+  const { data, isLoading, error } = coursesQuery.useCoursesQuery();
+
+  const handleEnrollClick = (courseId: number) => {
+    navigate(`${ROUTE_PATH.COURSE_ENROLL}?courseId=${courseId}`);
+  };
+
+  if (isLoading) {
+    return (
+      <S.LoadingContainer>
+        <S.LoadingMessage>강의 목록을 불러오는 중...</S.LoadingMessage>
+      </S.LoadingContainer>
+    );
+  }
+
+  if (error) {
+    return (
+      <S.ErrorContainer>
+        <S.ErrorMessage>
+          강의 목록을 불러오는데 실패했습니다.
+          <br />
+          잠시 후 다시 시도해주세요.
+        </S.ErrorMessage>
+      </S.ErrorContainer>
+    );
+  }
+
+  if (!data || data.content.length === 0) {
+    return (
+      <S.EmptyContainer>
+        <S.EmptyMessage>등록된 강의가 없습니다.</S.EmptyMessage>
+      </S.EmptyContainer>
+    );
+  }
+
+  return (
+    <S.Container>
+      <S.CardGrid>
+        {data.content.map(course => (
+          <CourseCard
+            key={course.id}
+            course={course}
+            onEnrollClick={handleEnrollClick}
+          />
+        ))}
+      </S.CardGrid>
+
+      {/* TODO: 무한 스크롤로 바꾸기*/}
+      <S.PaginationInfo>
+        총 {data.totalElements}개의 강의 (페이지 {data.pageable.pageNumber + 1}/
+        {data.totalPages})
+      </S.PaginationInfo>
+    </S.Container>
+  );
+}
+
+export default CourseCardList;
+
+const S = {
+  Container: styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: ${({ theme }) => theme.GAP.level6};
+  `,
+
+  CardGrid: styled.div`
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: ${({ theme }) => theme.GAP.level6};
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  `,
+
+  LoadingContainer: styled.div`
+    width: 100%;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: ${({ theme }) => theme.PALETTE.gray[5]};
+    border-radius: ${({ theme }) => theme.RADIUS.medium};
+  `,
+
+  LoadingMessage: styled.p`
+    color: ${({ theme }) => theme.PALETTE.gray[70]};
+    font: ${({ theme }) => theme.FONTS.body.large};
+  `,
+
+  ErrorContainer: styled.div`
+    width: 100%;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: ${({ theme }) => theme.PADDING.p8};
+
+    background-color: ${({ theme }) => theme.PALETTE.red[50]};
+    border-radius: ${({ theme }) => theme.RADIUS.medium};
+  `,
+
+  ErrorMessage: styled.p`
+    color: ${({ theme }) => theme.PALETTE.red[50]};
+    font: ${({ theme }) => theme.FONTS.body.large};
+    text-align: center;
+    line-height: 1.6;
+  `,
+
+  EmptyContainer: styled.div`
+    width: 100%;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: ${({ theme }) => theme.PADDING.p8};
+
+    background-color: ${({ theme }) => theme.PALETTE.gray[5]};
+    border-radius: ${({ theme }) => theme.RADIUS.medium};
+  `,
+
+  EmptyMessage: styled.p`
+    color: ${({ theme }) => theme.PALETTE.gray[50]};
+    font: ${({ theme }) => theme.FONTS.body.large};
+    text-align: center;
+  `,
+
+  PaginationInfo: styled.div`
+    width: 100%;
+    padding: ${({ theme }) => theme.PADDING.p4};
+
+    color: ${({ theme }) => theme.PALETTE.gray[60]};
+    font: ${({ theme }) => theme.FONTS.body.small};
+    text-align: center;
+
+    background-color: ${({ theme }) => theme.PALETTE.gray[5]};
+    border-radius: ${({ theme }) => theme.RADIUS.small};
+  `,
+};

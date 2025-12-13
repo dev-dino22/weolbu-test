@@ -2,16 +2,20 @@ import Button from '@components/actions/Button';
 import styled from '@emotion/styled';
 import { ROUTE_PATH } from '@routes/routePath';
 import { useNavigate } from 'react-router';
+import CourseCardList from '@domains/course/components/CourseCardList';
 
 function CourseEnrollPage() {
   const navigate = useNavigate();
 
   return (
     <S.Container>
-      <S.Title>강의 목록</S.Title>
-      <Button onClick={() => navigate(ROUTE_PATH.COURSE_CREATE)}>
-        강의 등록하기
-      </Button>
+      <S.Header>
+        <S.Title>강의 목록</S.Title>
+        <Button onClick={() => navigate(ROUTE_PATH.COURSE_CREATE)}>
+          강의 등록하기
+        </Button>
+      </S.Header>
+      <CourseCardList />
     </S.Container>
   );
 }
@@ -23,11 +27,15 @@ const S = {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    gap: ${({ theme }) => theme.GAP.level6};
+    padding: ${({ theme }) => theme.LAYOUT.headerHeight}
+      ${({ theme }) => theme.PADDING.p8};
+  `,
+  Header: styled.div`
+    display: flex;
+    justify-content: space-between;
     align-items: center;
     gap: ${({ theme }) => theme.GAP.level4};
-
-    padding: ${({ theme }) => theme.PADDING.p8};
   `,
   Title: styled.h1`
     color: ${({ theme }) => theme.PALETTE.gray[100]};
