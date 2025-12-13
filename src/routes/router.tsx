@@ -12,19 +12,25 @@ import SignUpPage from '@pages/auth/signUp/SignUpPage';
 import ToastProvider from '@components/toast/ToastProvider';
 import LoginPage from '@pages/auth/login/LoginPage';
 import { AuthProvider } from '@domains/auth/login/context/AuthProvider';
+import CourseCreatePage from '@pages/course/CourseCreatePage';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from '@apis/queryClient';
+import CourseListPage from '@pages/course/CourseListPage';
 
 function Wrapper() {
   return (
     <>
       <Global styles={reset} />
       <ThemeProvider theme={THEME}>
-        <ToastProvider>
-          <AuthProvider>
-            <Layout>
-              <Outlet />
-            </Layout>
-          </AuthProvider>
-        </ToastProvider>
+        <QueryClientProvider client={queryClient}>
+          <ToastProvider>
+            <AuthProvider>
+              <Layout>
+                <Outlet />
+              </Layout>
+            </AuthProvider>
+          </ToastProvider>
+        </QueryClientProvider>
       </ThemeProvider>
     </>
   );
@@ -37,6 +43,8 @@ const routes = createBrowserRouter([
       { path: ROUTE_PATH.MAIN, Component: Main },
       { path: ROUTE_PATH.SIGN_UP, Component: SignUpPage },
       { path: ROUTE_PATH.LOGIN, Component: LoginPage },
+      { path: ROUTE_PATH.COURSE_CREATE, Component: CourseCreatePage },
+      { path: ROUTE_PATH.COURSE_LIST, Component: CourseListPage },
     ],
   },
 ]);
