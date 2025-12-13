@@ -1,7 +1,6 @@
 import { apiClient } from './apiClient';
 import {
   useMutation,
-  useQuery,
   useQueryClient,
   useSuspenseQuery,
 } from '@tanstack/react-query';
@@ -50,6 +49,26 @@ export type CourseListResponse = {
   last: boolean;
 };
 
+export type BatchEnrollRequest = {
+  courseIds: number[];
+};
+
+export type EnrollmentSuccess = {
+  enrollmentId: number;
+  courseId: number;
+  courseTitle: string;
+};
+
+export type EnrollmentFailed = {
+  courseId: number;
+  reason: string;
+};
+
+export type BatchEnrollResponse = {
+  success: EnrollmentSuccess[];
+  failed: EnrollmentFailed[];
+};
+
 export const courses = {
   postCourse: async (courseData: CreateCourseRequest) => {
     const data = await apiClient.post<Course>(BASE_PATH, courseData);
@@ -76,6 +95,17 @@ export const courses = {
 
     return data;
   },
+
+  postBatchEnroll: async (enrollData: BatchEnrollRequest) => {
+    const data = await apiClient.post<BatchEnrollResponse>(
+      'enrollments/batch',
+      enrollData
+    );
+
+    if (!data) throw new Error('수강 신청 응답이 없습니다');
+
+    return data;
+  },
 };
 
 export const courseKeys = {
@@ -97,6 +127,16 @@ export const coursesQuery = {
 
     return useMutation({
       mutationFn: (data: CreateCourseRequest) => courses.postCourse(data),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: courseKeys.lists() });
+      },
+    });
+  },
+  useBatchEnrollMutation: () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+      mutationFn: (data: BatchEnrollRequest) => courses.postBatchEnroll(data),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: courseKeys.lists() });
       },
