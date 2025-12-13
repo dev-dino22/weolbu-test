@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 import { ROUTE_PATH } from '@routes/routePath';
 import { useShowToast } from '@components/toast/ToastProvider';
 import { ApiError } from '@apis/apiClient';
-import { useCreateCourseMutation } from '@apis/courses';
+import { coursesQuery } from '@apis/courses';
 
 type CourseFormData = {
   title: string;
@@ -19,7 +19,7 @@ type CourseFormData = {
 function CourseCreatePage() {
   const navigate = useNavigate();
   const showToast = useShowToast();
-  const createCourseMutation = useCreateCourseMutation();
+  const createCourseMutation = coursesQuery.useCreateCourseMutation();
 
   const {
     register,

@@ -1,5 +1,6 @@
 import { apiClient } from './apiClient';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { createQueryString } from '@utils/createUrl';
 
 const BASE_PATH = 'courses';
 
@@ -24,6 +25,26 @@ export type Course = {
   createdAt: string;
 };
 
+export type CourseSortType = 'recent' | 'popular' | 'rate';
+
+export type CourseListParams = {
+  page?: number;
+  size?: number;
+  sort?: CourseSortType;
+};
+
+export type CourseListResponse = {
+  content: Course[];
+  pageable: {
+    pageNumber: number;
+    pageSize: number;
+  };
+  totalElements: number;
+  totalPages: number;
+  first: boolean;
+  last: boolean;
+};
+
 export const courses = {
   postCourse: async (courseData: CreateCourseRequest) => {
     const data = await apiClient.post<Course>(BASE_PATH, courseData);
@@ -33,8 +54,18 @@ export const courses = {
     return data;
   },
 
-  getCourses: async () => {
-    const data = await apiClient.get<Course[]>(BASE_PATH);
+  getCourses: async (params: CourseListParams = {}) => {
+    const { page = 0, size = 10, sort = 'recent' } = params;
+
+    const queryString = createQueryString({
+      page: String(page),
+      size: String(size),
+      sort,
+    });
+
+    const data = await apiClient.get<CourseListResponse>(
+      `${BASE_PATH}${queryString}`
+    );
 
     if (!data) throw new Error('강의 목록 조회 응답이 없습니다');
 
@@ -49,20 +80,21 @@ export const courseKeys = {
     [...courseKeys.lists(), filters] as const,
 };
 
-export const useCoursesQuery = () => {
-  return useQuery({
-    queryKey: courseKeys.lists(),
-    queryFn: () => courses.getCourses(),
-  });
-};
+export const coursesQuery = {
+  useCoursesQuery: () => {
+    return useQuery({
+      queryKey: courseKeys.lists(),
+      queryFn: () => courses.getCourses(),
+    });
+  },
+  useCreateCourseMutation: () => {
+    const queryClient = useQueryClient();
 
-export const useCreateCourseMutation = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (data: CreateCourseRequest) => courses.postCourse(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: courseKeys.lists() });
-    },
-  });
+    return useMutation({
+      mutationFn: (data: CreateCourseRequest) => courses.postCourse(data),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: courseKeys.lists() });
+      },
+    });
+  },
 };
