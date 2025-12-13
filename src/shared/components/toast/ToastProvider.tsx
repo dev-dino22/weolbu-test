@@ -75,19 +75,13 @@ export const useShowToast = () => {
 
 const S = {
   Container: styled.div`
-    width: 100%;
-    max-width: ${({ theme }) => theme.LAYOUT.maxWidth};
+    ${({ theme }) => theme.POSITION.fixedCenter}
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: ${({ theme }) => theme.GAP.level3};
-    position: fixed;
     z-index: ${({ theme }) => theme.Z_INDEX.toast};
 
     padding: ${({ theme }) => theme.PADDING.p4};
-
-    transform: translateY(
-      calc(${({ theme }) => theme.LAYOUT.headerHeight} + 5px)
-    );
   `,
 };
