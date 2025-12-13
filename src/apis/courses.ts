@@ -3,6 +3,7 @@ import {
   useMutation,
   useQueryClient,
   useSuspenseQuery,
+  useSuspenseInfiniteQuery,
 } from '@tanstack/react-query';
 import { createQueryString } from '@utils/createUrl';
 
@@ -120,6 +121,21 @@ export const coursesQuery = {
     return useSuspenseQuery({
       queryKey: courseKeys.lists(),
       queryFn: () => courses.getCourses(),
+    });
+  },
+  // TODO: SuspenseInfiniteQuery 수정
+  useCoursesInfiniteQuery: (params?: CourseListParams) => {
+    const { size = 10, sort = 'recent' } = params || {};
+
+    return useSuspenseInfiniteQuery({
+      queryKey: courseKeys.list({ size, sort }),
+      queryFn: ({ pageParam = 0 }) =>
+        courses.getCourses({ page: pageParam, size, sort }),
+      getNextPageParam: lastPage => {
+        if (lastPage.last) return undefined;
+        return lastPage.pageable.pageNumber + 1;
+      },
+      initialPageParam: 0,
     });
   },
   useCreateCourseMutation: () => {

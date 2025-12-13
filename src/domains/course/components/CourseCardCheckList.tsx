@@ -2,8 +2,9 @@ import styled from '@emotion/styled';
 import CourseCard from './CourseCard';
 import { coursesQuery, type CourseListParams } from '@apis/courses';
 import Button from '@components/actions/Button';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useShowToast } from '@components/toast/ToastProvider';
+import LoadingSpinner from '@components/assets/LoadingSpinner';
 
 type Props = {
   params?: CourseListParams;
@@ -11,12 +12,47 @@ type Props = {
 
 function CourseCardCheckList({ params }: Props) {
   const showToast = useShowToast();
-  const { data } = coursesQuery.useCoursesSuspenseQuery();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    coursesQuery.useCoursesInfiniteQuery(params);
   const batchEnrollMutation = coursesQuery.useBatchEnrollMutation();
+
+  const observerTarget = useRef<HTMLDivElement>(null);
+  const throttleTimer = useRef<NodeJS.Timeout | null>(null);
 
   const [selectedCourseIds, setSelectedCourseIds] = useState<Set<number>>(
     new Set()
   );
+
+  useEffect(() => {
+    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+      if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+        if (throttleTimer.current) return;
+
+        throttleTimer.current = setTimeout(() => {
+          fetchNextPage();
+          throttleTimer.current = null;
+        }, 500);
+      }
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, {
+      threshold: 0.1,
+    });
+
+    const currentTarget = observerTarget.current;
+    if (currentTarget) {
+      observer.observe(currentTarget);
+    }
+
+    return () => {
+      if (currentTarget) {
+        observer.unobserve(currentTarget);
+      }
+      if (throttleTimer.current) {
+        clearTimeout(throttleTimer.current);
+      }
+    };
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   const handleCheckChange = (courseId: number, checked: boolean) => {
     setSelectedCourseIds(prev => {
@@ -82,7 +118,11 @@ function CourseCardCheckList({ params }: Props) {
     );
   };
 
-  if (data.content.length === 0) {
+  const allCourses = data.pages.flatMap(page => page.content);
+  const availableCount = allCourses.filter(course => !course.isFull).length;
+  const totalElements = data.pages[0]?.totalElements || 0;
+
+  if (allCourses.length === 0) {
     return (
       <S.EmptyContainer>
         <S.EmptyMessage>등록된 강의가 없습니다.</S.EmptyMessage>
@@ -92,8 +132,13 @@ function CourseCardCheckList({ params }: Props) {
 
   return (
     <S.Container>
+      <S.SelectionInfo>
+        선택: {selectedCourseIds.size}개 / 로드된 강의: {allCourses.length}개 /
+        전체: {totalElements}개 (신청 가능: {availableCount}개)
+      </S.SelectionInfo>
+
       <S.CardGrid>
-        {data.content.map(course => (
+        {allCourses.map(course => (
           <CourseCard
             key={course.id}
             course={course}
@@ -104,11 +149,21 @@ function CourseCardCheckList({ params }: Props) {
         ))}
       </S.CardGrid>
 
-      {/* TODO: 무한 스크롤로 바꾸기*/}
-      <S.PaginationInfo>
-        총 {data.totalElements}개의 강의 (페이지 {data.pageable.pageNumber + 1}/
-        {data.totalPages})
-      </S.PaginationInfo>
+      <S.ObserverTarget ref={observerTarget} />
+
+      {isFetchingNextPage && (
+        <S.LoadingContainer>
+          <S.LoadingMessage>강의 목록을 불러오는 중...</S.LoadingMessage>
+        </S.LoadingContainer>
+      )}
+
+      {!hasNextPage && allCourses.length > 0 ? (
+        <S.PaginationInfo>
+          총 {totalElements}개의 강의를 모두 불러왔습니다.
+        </S.PaginationInfo>
+      ) : (
+        <LoadingSpinner />
+      )}
       <S.EnrollButtonBox>
         <Button
           onClick={handleEnroll}
@@ -193,5 +248,23 @@ const S = {
 
     background-color: ${({ theme }) => theme.PALETTE.gray[5]};
     border-radius: ${({ theme }) => theme.RADIUS.small};
+  `,
+
+  ObserverTarget: styled.div`
+    height: 20px;
+    width: 100%;
+  `,
+
+  LoadingContainer: styled.div`
+    width: 100%;
+    padding: ${({ theme }) => theme.PADDING.p6};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  `,
+
+  LoadingMessage: styled.p`
+    color: ${({ theme }) => theme.PALETTE.gray[70]};
+    font: ${({ theme }) => theme.FONTS.body.medium};
   `,
 };
