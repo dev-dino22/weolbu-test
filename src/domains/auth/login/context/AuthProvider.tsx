@@ -1,6 +1,6 @@
 import {
   createContext,
-  ReactNode,
+  type ReactNode,
   useCallback,
   useContext,
   useEffect,
@@ -8,11 +8,12 @@ import {
 } from 'react';
 
 import { ACCESS_TOKEN_STORAGE_NAME, accessToken } from '../utils/authStorage';
+import { users, type LoginRequest } from '@apis/users';
 
 interface AuthContextType {
   loggedIn: boolean;
   loading: boolean;
-  loginUser: (token: string) => Promise<void>;
+  login: (credentials: LoginRequest) => Promise<void>;
   logoutUser: () => void;
   hasToken: () => boolean;
 }
@@ -54,28 +55,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  const loginUser = useCallback(
-    async (token: string) => {
-      accessToken.save(token);
-      setLoggedIn(true);
-    },
-    [accessToken, setLoggedIn]
-  );
+  const login = useCallback(async (credentials: LoginRequest) => {
+    const data = await users.postLogin(credentials);
+    accessToken.save(data.accessToken);
+    setLoggedIn(true);
+  }, []);
 
   const logoutUser = useCallback(() => {
     accessToken.remove();
     setLoggedIn(false);
-  }, [accessToken, setLoggedIn]);
+  }, []);
 
   const hasToken = useCallback(() => {
     const token = accessToken.get();
     return !!token;
-  }, [accessToken]);
+  }, []);
 
   const value = {
     loggedIn,
     loading,
-    loginUser,
+    login,
     logoutUser,
     hasToken,
   };

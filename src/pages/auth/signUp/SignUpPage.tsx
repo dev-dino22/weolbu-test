@@ -11,6 +11,7 @@ import { ROUTE_PATH } from '@routes/routePath';
 import { useShowToast } from '@components/toast/ToastProvider';
 import { users } from '@apis/users';
 import { ApiError } from '@apis/apiClient';
+import { useAuth } from '@domains/auth/login/context/AuthProvider';
 
 type SignUpFormData = {
   name: string;
@@ -23,6 +24,7 @@ type SignUpFormData = {
 function SignUpPage() {
   const navigate = useNavigate();
   const showToast = useShowToast();
+  const { login } = useAuth();
   const {
     register,
     handleSubmit,
@@ -41,7 +43,7 @@ function SignUpPage() {
         role: data.userType,
       });
 
-      await users.postLogin({
+      await login({
         email: data.email,
         password: data.password,
       });

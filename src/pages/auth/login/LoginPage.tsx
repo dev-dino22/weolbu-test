@@ -5,8 +5,8 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { ROUTE_PATH } from '@routes/routePath';
 import { useShowToast } from '@components/toast/ToastProvider';
-import { users } from '@apis/users';
 import { ApiError } from '@apis/apiClient';
+import { useAuth } from '@domains/auth/login/context/AuthProvider';
 
 type LoginFormData = {
   email: string;
@@ -16,6 +16,7 @@ type LoginFormData = {
 function LoginPage() {
   const navigate = useNavigate();
   const showToast = useShowToast();
+  const { login } = useAuth();
   const {
     register,
     handleSubmit,
@@ -26,7 +27,7 @@ function LoginPage() {
 
   const onSubmit: SubmitHandler<LoginFormData> = async data => {
     try {
-      await users.postLogin({
+      await login({
         email: data.email,
         password: data.password,
       });
