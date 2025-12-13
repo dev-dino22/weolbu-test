@@ -3,6 +3,9 @@ import styled from '@emotion/styled';
 import { ROUTE_PATH } from '@routes/routePath';
 import { useNavigate } from 'react-router';
 import CourseCardList from '@domains/course/components/CourseCardList';
+import ErrorBoundary from '@domains/errorboundary/ErrorBoundary';
+import { Suspense } from 'react';
+import LoadingSpinner from '@components/assets/LoadingSpinner';
 
 function CourseEnrollPage() {
   const navigate = useNavigate();
@@ -15,7 +18,11 @@ function CourseEnrollPage() {
           강의 등록하기
         </Button>
       </S.Header>
-      <CourseCardList />
+      <ErrorBoundary>
+        <Suspense fallback={<LoadingSpinner />}>
+          <CourseCardList />
+        </Suspense>
+      </ErrorBoundary>
     </S.Container>
   );
 }

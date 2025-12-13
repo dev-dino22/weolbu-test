@@ -1,5 +1,10 @@
 import { apiClient } from './apiClient';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import { createQueryString } from '@utils/createUrl';
 
 const BASE_PATH = 'courses';
@@ -81,8 +86,8 @@ export const courseKeys = {
 };
 
 export const coursesQuery = {
-  useCoursesQuery: () => {
-    return useQuery({
+  useCoursesSuspenseQuery: () => {
+    return useSuspenseQuery({
       queryKey: courseKeys.lists(),
       queryFn: () => courses.getCourses(),
     });

@@ -10,33 +10,13 @@ type Props = {
 
 function CourseCardList({ params }: Props) {
   const navigate = useNavigate();
-  const { data, isLoading, error } = coursesQuery.useCoursesQuery();
+  const { data } = coursesQuery.useCoursesSuspenseQuery();
 
   const handleEnrollClick = (courseId: number) => {
     navigate(`${ROUTE_PATH.COURSE_ENROLL}?courseId=${courseId}`);
   };
 
-  if (isLoading) {
-    return (
-      <S.LoadingContainer>
-        <S.LoadingMessage>강의 목록을 불러오는 중...</S.LoadingMessage>
-      </S.LoadingContainer>
-    );
-  }
-
-  if (error) {
-    return (
-      <S.ErrorContainer>
-        <S.ErrorMessage>
-          강의 목록을 불러오는데 실패했습니다.
-          <br />
-          잠시 후 다시 시도해주세요.
-        </S.ErrorMessage>
-      </S.ErrorContainer>
-    );
-  }
-
-  if (!data || data.content.length === 0) {
+  if (data.content.length === 0) {
     return (
       <S.EmptyContainer>
         <S.EmptyMessage>등록된 강의가 없습니다.</S.EmptyMessage>
