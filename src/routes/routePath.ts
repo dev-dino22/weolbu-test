@@ -3,5 +3,5 @@ export const ROUTE_PATH = {
   SIGN_UP: '/sign-up',
   LOGIN: '/login',
   COURSE_CREATE: '/course/create',
-  COURSE_LIST: '/courses',
+  COURSE_ENROLL: '/courses/enroll',
 };

@@ -51,7 +51,7 @@ function SignUpPage() {
         message: '회원가입이 완료되었습니다!',
       });
 
-      navigate(ROUTE_PATH.COURSE_LIST);
+      navigate(ROUTE_PATH.COURSE_ENROLL);
     } catch (error) {
       if (error instanceof ApiError && error.body) {
         const errorMessage = (error.body as { message?: string }).message;

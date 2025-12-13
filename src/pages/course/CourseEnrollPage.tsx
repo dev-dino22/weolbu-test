@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { ROUTE_PATH } from '@routes/routePath';
 import { useNavigate } from 'react-router';
 
-function CourseListPage() {
+function CourseEnrollPage() {
   const navigate = useNavigate();
 
   return (
@@ -16,7 +16,7 @@ function CourseListPage() {
   );
 }
 
-export default CourseListPage;
+export default CourseEnrollPage;
 
 const S = {
   Container: styled.div`

@@ -43,7 +43,7 @@ function CourseCreatePage() {
         mode: 'SUCCESS',
         message: '강의가 개설되었습니다!',
       });
-      navigate(ROUTE_PATH.MAIN);
+      navigate(ROUTE_PATH.COURSE_ENROLL);
     } catch (error) {
       if (error instanceof ApiError && error.body) {
         const errorMessage = (error.body as { message?: string }).message;

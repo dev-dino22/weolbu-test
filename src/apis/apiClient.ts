@@ -1,3 +1,5 @@
+import { accessToken } from '@domains/auth/login/utils/authStorage';
+
 export type ApiHeaders = Record<string, string>;
 export type ApiBody = Record<string, unknown> | undefined;
 export type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE';
@@ -22,7 +24,7 @@ const requestApi = async <TResponse = unknown>(
   body?: ApiBody,
   headers?: ApiHeaders
 ): Promise<TResponse | null> => {
-  const token = localStorage.getItem('token') ?? '';
+  const token = accessToken.get() ?? '';
   const response = await fetch(`${apiBaseUrl}${endPoint}`, {
     method,
     headers: {

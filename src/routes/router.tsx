@@ -15,7 +15,7 @@ import { AuthProvider } from '@domains/auth/login/context/AuthProvider';
 import CourseCreatePage from '@pages/course/CourseCreatePage';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@apis/queryClient';
-import CourseListPage from '@pages/course/CourseListPage';
+import CourseEnrollPage from '@pages/course/CourseEnrollPage';
 
 function Wrapper() {
   return (
@@ -44,7 +44,7 @@ const routes = createBrowserRouter([
       { path: ROUTE_PATH.SIGN_UP, Component: SignUpPage },
       { path: ROUTE_PATH.LOGIN, Component: LoginPage },
       { path: ROUTE_PATH.COURSE_CREATE, Component: CourseCreatePage },
-      { path: ROUTE_PATH.COURSE_LIST, Component: CourseListPage },
+      { path: ROUTE_PATH.COURSE_ENROLL, Component: CourseEnrollPage },
     ],
   },
 ]);
