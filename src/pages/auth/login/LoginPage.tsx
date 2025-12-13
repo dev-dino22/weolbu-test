@@ -31,12 +31,6 @@ function LoginPage() {
         email: data.email,
         password: data.password,
       });
-
-      showToast({
-        mode: 'SUCCESS',
-        message: '로그인되었습니다!',
-      });
-
       navigate(ROUTE_PATH.COURSE_ENROLL);
     } catch (error) {
       if (error instanceof ApiError && error.body) {

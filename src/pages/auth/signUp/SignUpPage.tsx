@@ -218,7 +218,8 @@ const S = {
 
     gap: ${({ theme }) => theme.GAP.level8};
 
-    padding: ${({ theme }) => theme.PADDING.p8};
+    padding: ${({ theme }) => theme.LAYOUT.headerHeight}
+      ${({ theme }) => theme.PADDING.p8};
 
     background-color: ${({ theme }) => theme.PALETTE.gray[0]};
   `,

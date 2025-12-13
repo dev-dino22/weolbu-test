@@ -14,8 +14,12 @@ function CourseEnrollPage() {
     <S.Container>
       <S.Header>
         <S.Title>강의 목록</S.Title>
-        <Button onClick={() => navigate(ROUTE_PATH.COURSE_CREATE)}>
-          강의 등록하기
+        <Button
+          variant="outlined"
+          size="sm"
+          onClick={() => navigate(ROUTE_PATH.COURSE_CREATE)}
+        >
+          + 강의 등록
         </Button>
       </S.Header>
       <ErrorBoundary>

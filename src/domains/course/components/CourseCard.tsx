@@ -177,7 +177,7 @@ const S = {
     color: ${({ theme }) => theme.PALETTE.gray[70]};
   `,
   Price: styled.span`
-    color: ${({ theme }) => theme.PALETTE.primary[60]};
+    color: ${({ theme }) => theme.PALETTE.primary[50]};
     font: ${({ theme }) => theme.FONTS.body.large_bold};
   `,
 
