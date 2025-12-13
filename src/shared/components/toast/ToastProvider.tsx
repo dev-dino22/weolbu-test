@@ -83,5 +83,6 @@ const S = {
     z-index: ${({ theme }) => theme.Z_INDEX.toast};
 
     padding: ${({ theme }) => theme.PADDING.p4};
+    pointer-events: none;
   `,
 };
