@@ -5,12 +5,18 @@ import type { ComponentProps, ReactNode } from 'react';
 
 type Props = {
   size?: 'sm' | 'lg';
+  variant?: 'filled' | 'outlined';
   children?: ReactNode;
 } & ComponentProps<'button'>;
 
-function Button({ size = 'lg', children, ...props }: Props) {
+function Button({
+  size = 'lg',
+  variant = 'filled',
+  children,
+  ...props
+}: Props) {
   return (
-    <S.Container size={size} {...props}>
+    <S.Container size={size} variant={variant} {...props}>
       {children}
     </S.Container>
   );
@@ -28,14 +34,25 @@ const SIZE = {
 } as const;
 
 const S = {
-  Container: styled.button<{ size: NonNullable<Props['size']> }>`
+  Container: styled.button<{
+    size: NonNullable<Props['size']>;
+    variant: NonNullable<Props['variant']>;
+  }>`
     width: ${({ size }) => SIZE[size].width};
     height: ${({ size }) => SIZE[size].height};
 
-    background-color: ${({ theme }) => theme.PALETTE.primary[50]};
+    background-color: ${({ theme, variant }) =>
+      variant === 'outlined'
+        ? theme.PALETTE.gray[0]
+        : theme.PALETTE.primary[50]};
 
-    color: ${({ theme }) => theme.PALETTE.gray[0]};
+    color: ${({ theme, variant }) =>
+      variant === 'outlined' ? theme.PALETTE.gray[60] : theme.PALETTE.gray[0]};
+
     font: ${({ size }) => SIZE[size].font};
+
+    border: ${({ theme, variant }) =>
+      variant === 'outlined' ? `1px solid ${theme.PALETTE.gray[40]}` : 'none'};
 
     border-radius: ${({ theme }) => theme.RADIUS.small};
 

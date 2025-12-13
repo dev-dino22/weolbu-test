@@ -164,6 +164,7 @@ function CourseCreatePage() {
           <Button
             type="button"
             size="lg"
+            variant="outlined"
             onClick={() => navigate(ROUTE_PATH.MAIN)}
           >
             취소
