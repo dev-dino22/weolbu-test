@@ -6,12 +6,10 @@ import LoadingSpinner from '@components/assets/LoadingSpinner';
 import Modal from '@components/modal/Modal';
 import CourseDetail from '@domains/course/detail/components/CourseDetail';
 import { useModal } from '@components/modal/useModal';
+import { equalByKeys } from '@utils/deepEqual';
 
 type Props = {
   course: Course;
-  isCheckable?: boolean;
-  isChecked?: boolean;
-  onCheckChange?: (courseId: number, checked: boolean) => void;
 };
 
 function CourseCard({ course }: Props) {
@@ -78,15 +76,14 @@ function CourseCard({ course }: Props) {
   );
 }
 
-const areEqual = (prev: Props, next: Props) => {
-  if (prev.course.id !== next.course.id) return false;
-  if (prev.course.currentStudents !== next.course.currentStudents) return false;
-  if (prev.course.isFull !== next.course.isFull) return false;
-  if (prev.course.price !== next.course.price) return false;
-  return true;
-};
-
-export default React.memo(CourseCard, areEqual);
+export default React.memo(CourseCard, (prev: Props, next: Props) =>
+  equalByKeys(prev.course, next.course, [
+    'id',
+    'currentStudents',
+    'isFull',
+    'price',
+  ])
+);
 
 const S = {
   Container: styled.div`

@@ -1,7 +1,7 @@
-export function deepEqual(a: any, b: any): boolean {
+export function deepEqual(a: unknown, b: unknown): boolean {
   if (a === b) return true;
 
-  if (a && b && typeof a === 'object') {
+  if (a && b && typeof a === 'object' && typeof b === 'object') {
     if (Array.isArray(a) && Array.isArray(b)) {
       if (a.length !== b.length) return false;
       for (let i = 0; i < a.length; i++) {
@@ -19,7 +19,13 @@ export function deepEqual(a: any, b: any): boolean {
 
     for (const key of keysA) {
       if (!Object.prototype.hasOwnProperty.call(b, key)) return false;
-      if (!deepEqual(a[key], b[key])) return false;
+      if (
+        !deepEqual(
+          (a as Record<string, unknown>)[key],
+          (b as Record<string, unknown>)[key]
+        )
+      )
+        return false;
     }
 
     return true;
@@ -28,7 +34,11 @@ export function deepEqual(a: any, b: any): boolean {
   return false;
 }
 
-export function equalByKeys(objA: any, objB: any, keys: string[]): boolean {
+export function equalByKeys<T extends Record<string, unknown>>(
+  objA: T | null | undefined,
+  objB: T | null | undefined,
+  keys: (keyof T)[]
+): boolean {
   for (const k of keys) {
     if (!deepEqual(objA?.[k], objB?.[k])) return false;
   }

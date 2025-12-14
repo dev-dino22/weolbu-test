@@ -4,12 +4,18 @@ import React from 'react';
 import { useCheckCourses } from '../../context/CheckCoursesContext';
 import CourseCard from './CourseCard';
 import CourseCheckbox from './CourseCheckBox';
+import type { CourseListResponse, Course } from '@apis/courses';
 
-function CourseCardList({ data }: { data: any }) {
+type InfiniteQueryData = {
+  pages: CourseListResponse[];
+  pageParams: unknown[];
+};
+
+function CourseCardList({ data }: { data: InfiniteQueryData }) {
   const { selectedCourseIds, toggleSelection } = useCheckCourses();
 
   type ItemProps = {
-    course: any;
+    course: Course;
     isChecked: boolean;
     onToggle: (id: number, checked: boolean) => void;
   };
@@ -17,7 +23,7 @@ function CourseCardList({ data }: { data: any }) {
   const CourseListItem = React.memo(
     function CourseListItem({ course, isChecked, onToggle }: ItemProps) {
       return (
-        <div>
+        <S.ItemBox>
           <S.CheckboxWrapper>
             <CourseCheckbox
               courseId={course.id}
@@ -31,7 +37,7 @@ function CourseCardList({ data }: { data: any }) {
             isChecked={isChecked}
             onCheckChange={onToggle}
           />
-        </div>
+        </S.ItemBox>
       );
     },
     (prev, next) => {
@@ -50,8 +56,8 @@ function CourseCardList({ data }: { data: any }) {
 
   return (
     <S.CardList>
-      {data.pages.map((page: any, pageIndex: number) =>
-        page.content.map((course: any, courseIndex: number) => {
+      {data.pages.map((page, pageIndex: number) =>
+        page.content.map((course, courseIndex: number) => {
           const key = `${pageIndex}-${course.id}-${courseIndex}`;
           const isChecked = selectedCourseIds.has(course.id);
           return (
@@ -76,6 +82,11 @@ const S = {
     display: flex;
     flex-direction: column;
     gap: ${({ theme }) => theme.GAP.level6};
+  `,
+  ItemBox: styled.div`
+    display: flex;
+    align-items: center;
+    gap: ${({ theme }) => theme.GAP.level4};
   `,
   CheckboxWrapper: styled.div``,
 };
