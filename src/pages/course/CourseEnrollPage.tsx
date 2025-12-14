@@ -34,37 +34,39 @@ function CourseEnrollPage() {
           </Button>
         </S.HeaderRight>
       </S.Header>
-      <ErrorBoundary>
-        <Suspense fallback={<LoadingSpinner />}>
-          <RadioGroup legend="정렬 방식">
-            <RadioButton
-              name="sortType"
-              value="recent"
-              checked={sortType === 'recent'}
-              onChange={handleSortChange}
-            >
-              최신순
-            </RadioButton>
-            <RadioButton
-              name="sortType"
-              value="popular"
-              checked={sortType === 'popular'}
-              onChange={handleSortChange}
-            >
-              인기순
-            </RadioButton>
-            <RadioButton
-              name="sortType"
-              value="rate"
-              checked={sortType === 'rate'}
-              onChange={handleSortChange}
-            >
-              신청률순
-            </RadioButton>
-          </RadioGroup>
-          <CourseCardCheckList params={{ sort: sortType }} />
-        </Suspense>
-      </ErrorBoundary>
+      <S.ListContainer>
+        <RadioGroup>
+          <RadioButton
+            name="sortType"
+            value="recent"
+            checked={sortType === 'recent'}
+            onChange={handleSortChange}
+          >
+            최신순
+          </RadioButton>
+          <RadioButton
+            name="sortType"
+            value="popular"
+            checked={sortType === 'popular'}
+            onChange={handleSortChange}
+          >
+            인기순
+          </RadioButton>
+          <RadioButton
+            name="sortType"
+            value="rate"
+            checked={sortType === 'rate'}
+            onChange={handleSortChange}
+          >
+            신청률순
+          </RadioButton>
+        </RadioGroup>
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingSpinner />}>
+            <CourseCardCheckList params={{ sort: sortType }} />
+          </Suspense>
+        </ErrorBoundary>
+      </S.ListContainer>
     </S.Container>
   );
 }
@@ -95,4 +97,5 @@ const S = {
     color: ${({ theme }) => theme.PALETTE.gray[100]};
     font: ${({ theme }) => theme.FONTS.heading.small};
   `,
+  ListContainer: styled.div``,
 };

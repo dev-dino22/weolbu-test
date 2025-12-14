@@ -1,10 +1,10 @@
-import styled from '@emotion/styled';
-import CourseCard from './CourseCard';
 import { coursesQuery, type CourseListParams } from '@apis/courses';
 import Button from '@components/actions/Button';
-import { useState, useEffect, useRef } from 'react';
-import { useShowToast } from '@components/toast/ToastProvider';
 import LoadingSpinner from '@components/assets/LoadingSpinner';
+import { useShowToast } from '@components/toast/ToastProvider';
+import styled from '@emotion/styled';
+import { useEffect, useRef, useState } from 'react';
+import CourseCard from './CourseCard';
 
 type Props = {
   params?: CourseListParams;
@@ -119,7 +119,6 @@ function CourseCardCheckList({ params }: Props) {
   };
 
   const allCourses = data.pages.flatMap(page => page.content);
-  const availableCount = allCourses.filter(course => !course.isFull).length;
   const totalElements = data.pages[0]?.totalElements || 0;
 
   if (allCourses.length === 0) {
@@ -132,21 +131,18 @@ function CourseCardCheckList({ params }: Props) {
 
   return (
     <S.Container>
-      <S.SelectionInfo>
-        선택: {selectedCourseIds.size}개 / 로드된 강의: {allCourses.length}개 /
-        전체: {totalElements}개 (신청 가능: {availableCount}개)
-      </S.SelectionInfo>
-
       <S.CardGrid>
-        {allCourses.map(course => (
-          <CourseCard
-            key={course.id}
-            course={course}
-            isCheckable
-            isChecked={selectedCourseIds.has(course.id)}
-            onCheckChange={handleCheckChange}
-          />
-        ))}
+        {data.pages.map((page, pageIndex) =>
+          page.content.map((course, courseIndex) => (
+            <CourseCard
+              key={`${pageIndex}-${course.id}-${courseIndex}`}
+              course={course}
+              isCheckable
+              isChecked={selectedCourseIds.has(course.id)}
+              onCheckChange={handleCheckChange}
+            />
+          ))
+        )}
       </S.CardGrid>
 
       <S.ObserverTarget ref={observerTarget} />
