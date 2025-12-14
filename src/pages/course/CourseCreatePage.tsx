@@ -111,6 +111,10 @@ function CourseCreatePage() {
               value: 2,
               message: '강사명은 최소 2자 이상이어야 합니다',
             },
+            maxLength: {
+              value: 10,
+              message: '강사명은 최대 10자까지 입력 가능합니다',
+            },
           })}
         />
         <UncontrolledInput

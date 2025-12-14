@@ -67,6 +67,10 @@ export const signUpFormRules: Record<
       value: 2,
       message: '이름은 최소 2자 이상이어야 합니다',
     },
+    maxLength: {
+      value: 10,
+      message: '이름은 최대 10자까지 입력 가능합니다',
+    },
   },
 
   email: {
