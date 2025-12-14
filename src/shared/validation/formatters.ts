@@ -6,14 +6,16 @@
  * formatPhoneNumber('01012345678') // '010-1234-5678'
  * formatPhoneNumber('010-1234-5678') // '010-1234-5678'
  */
-export function formatPhoneNumber(value: string): string {
-  // 숫자만 추출
+
+export const formatter = {
+  toPhoneNumber,
+};
+
+function toPhoneNumber(value: string): string {
   const numbers = value.replace(/[^\d]/g, '');
 
-  // 최대 11자리까지만 허용
   const limitedNumbers = numbers.slice(0, 11);
 
-  // 길이에 따라 하이픈 삽입
   if (limitedNumbers.length <= 3) {
     return limitedNumbers;
   } else if (limitedNumbers.length <= 7) {

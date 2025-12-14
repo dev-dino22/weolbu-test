@@ -12,7 +12,7 @@ import { useShowToast } from '@components/toast/ToastProvider';
 import { users } from '@apis/users';
 import { ApiError } from '@apis/apiClient';
 import { useAuth } from '@domains/auth/context/AuthProvider';
-import { signUpFormRules } from '@domains/auth/validation';
+import { signUpFormRules } from '@domains/auth/validation/index';
 
 type SignUpFormData = {
   name: string;
