@@ -26,7 +26,6 @@ function CourseCardList({ data }: { data: any }) {
               onToggle={onToggle}
             />
           </S.CheckboxWrapper>
-
           <CourseCard
             course={course}
             isChecked={isChecked}
