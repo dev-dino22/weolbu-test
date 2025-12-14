@@ -10,6 +10,8 @@ export function deepEqual(a: unknown, b: unknown): boolean {
       return true;
     }
 
+    if (Array.isArray(a) || Array.isArray(b)) return false;
+
     if (a instanceof Date && b instanceof Date)
       return a.getTime() === b.getTime();
 
