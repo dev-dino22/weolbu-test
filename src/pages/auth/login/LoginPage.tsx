@@ -7,6 +7,7 @@ import { ROUTE_PATH } from '@routes/routePath';
 import { useShowToast } from '@components/toast/ToastProvider';
 import { ApiError } from '@apis/apiClient';
 import { useAuth } from '@domains/auth/login/context/AuthProvider';
+import { loginFormRules } from '@domains/auth/utils/loginFormRules';
 
 type LoginFormData = {
   email: string;
@@ -58,13 +59,7 @@ function LoginPage() {
           type="email"
           error={!!errors.email}
           feedbackMessage={errors.email?.message}
-          {...register('email', {
-            required: '이메일을 입력해주세요',
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: '올바른 이메일 형식이 아닙니다',
-            },
-          })}
+          {...register('email', loginFormRules.email)}
         />
         <UncontrolledInput
           label="비밀번호"
@@ -72,9 +67,7 @@ function LoginPage() {
           type="password"
           error={!!errors.password}
           feedbackMessage={errors.password?.message}
-          {...register('password', {
-            required: '비밀번호를 입력해주세요',
-          })}
+          {...register('password', loginFormRules.password)}
         />
         <Button type="submit" size="lg">
           로그인

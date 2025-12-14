@@ -12,6 +12,7 @@ import { useShowToast } from '@components/toast/ToastProvider';
 import { users } from '@apis/users';
 import { ApiError } from '@apis/apiClient';
 import { useAuth } from '@domains/auth/login/context/AuthProvider';
+import { signUpFormRules } from '@domains/auth/utils/signUpFormRules';
 
 type SignUpFormData = {
   name: string;
@@ -70,50 +71,6 @@ function SignUpPage() {
     }
   };
 
-  // TODO: 리팩토링 함수분리
-
-  const validatePassword = (value: string) => {
-    if (value.length < 6 || value.length > 10) {
-      return '비밀번호는 6자 이상 10자 이하여야 합니다';
-    }
-
-    const hasSpecialChar = /[^a-zA-Z0-9]/.test(value);
-    if (hasSpecialChar) {
-      return '비밀번호는 영문과 숫자만 사용할 수 있습니다';
-    }
-
-    const hasLowerCase = /[a-z]/.test(value);
-    const hasUpperCase = /[A-Z]/.test(value);
-    const hasNumber = /[0-9]/.test(value);
-
-    const combinationCount = [hasLowerCase, hasUpperCase, hasNumber].filter(
-      Boolean
-    ).length;
-
-    if (combinationCount < 2) {
-      return '영문 소문자, 대문자, 숫자 중 최소 2가지 이상 조합이 필요합니다';
-    }
-
-    return true;
-  };
-
-  const formatPhoneNumber = (value: string) => {
-    const numbers = value.replace(/[^\d]/g, '');
-
-    const limitedNumbers = numbers.slice(0, 11);
-
-    if (limitedNumbers.length <= 3) {
-      return limitedNumbers;
-    } else if (limitedNumbers.length <= 7) {
-      return `${limitedNumbers.slice(0, 3)}-${limitedNumbers.slice(3)}`;
-    } else {
-      return `${limitedNumbers.slice(0, 3)}-${limitedNumbers.slice(
-        3,
-        7
-      )}-${limitedNumbers.slice(7)}`;
-    }
-  };
-
   return (
     <S.Container>
       <S.Title>회원 가입</S.Title>
@@ -124,13 +81,7 @@ function SignUpPage() {
           required
           error={!!errors.name}
           feedbackMessage={errors.name?.message}
-          {...register('name', {
-            required: '이름을 입력해주세요',
-            minLength: {
-              value: 2,
-              message: '이름은 최소 2자 이상이어야 합니다',
-            },
-          })}
+          {...register('name', signUpFormRules.name)}
         />
         <UncontrolledInput
           label="이메일"
@@ -139,13 +90,7 @@ function SignUpPage() {
           required
           error={!!errors.email}
           feedbackMessage={errors.email?.message}
-          {...register('email', {
-            required: '이메일을 입력해주세요',
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: '올바른 이메일 형식이 아닙니다',
-            },
-          })}
+          {...register('email', signUpFormRules.email)}
         />
         <UncontrolledInput
           label="휴대폰 번호"
@@ -154,16 +99,7 @@ function SignUpPage() {
           required
           error={!!errors.phone}
           feedbackMessage={errors.phone?.message}
-          {...register('phone', {
-            required: '휴대폰 번호를 입력해주세요',
-            pattern: {
-              value: /^01[0-9]-[0-9]{3,4}-[0-9]{4}$/,
-              message: '올바른 휴대폰 번호 형식이 아닙니다 (예: 010-1234-5678)',
-            },
-            onChange: e => {
-              e.target.value = formatPhoneNumber(e.target.value);
-            },
-          })}
+          {...register('phone', signUpFormRules.phone)}
         />
         <UncontrolledInput
           label="비밀번호"
@@ -173,10 +109,7 @@ function SignUpPage() {
           required
           error={!!errors.password}
           feedbackMessage={errors.password?.message}
-          {...register('password', {
-            required: '비밀번호를 입력해주세요',
-            validate: validatePassword,
-          })}
+          {...register('password', signUpFormRules.password)}
         />
         <RadioGroup legend="수강 신청 유형">
           <RadioButton

@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 
-import { ACCESS_TOKEN_STORAGE_NAME, accessToken } from '../utils/authStorage';
+import { ACCESS_TOKEN_STORAGE_NAME, accessToken } from '../storage/authStorage';
 import { users, type LoginRequest } from '@apis/users';
 
 interface AuthContextType {
