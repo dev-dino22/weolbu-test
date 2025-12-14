@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import type { Course } from '@apis/courses';
 import styled from '@emotion/styled';
+import ErrorBoundary from '@domains/errorboundary/ErrorBoundary';
+import LoadingSpinner from '@components/assets/LoadingSpinner';
+import Modal from '@components/modal/Modal';
+import CourseDetail from '@domains/course/detail/components/CourseDetail';
+import { useModal } from '@components/modal/useModal';
 
 type Props = {
   course: Course;
   isCheckable?: boolean;
   isChecked?: boolean;
   onCheckChange?: (courseId: number, checked: boolean) => void;
-  onClick?: (id: number) => void;
 };
 
-function CourseCard({ course, onClick }: Props) {
+function CourseCard({ course }: Props) {
   const {
     id,
     title,
@@ -22,38 +26,55 @@ function CourseCard({ course, onClick }: Props) {
     price,
   } = course;
 
+  const { mounted, opened, handleOpenModal, handleUnmountModal } = useModal();
+
   return (
-    <S.Container>
-      <S.Wrapper onClick={() => onClick?.(id)}>
-        <S.Header>
-          <S.Title>
-            {isFull && <S.FullBadge>마감</S.FullBadge>}
-            {title}
-          </S.Title>
-          <S.HeaderRight>
-            <S.Price>{price.toLocaleString('ko-KR')}원</S.Price>
-          </S.HeaderRight>
-        </S.Header>
+    <>
+      <S.Container>
+        <S.Wrapper onClick={handleOpenModal}>
+          <S.Header>
+            <S.Title>
+              {isFull && <S.FullBadge>마감</S.FullBadge>}
+              {title}
+            </S.Title>
+            <S.HeaderRight>
+              <S.Price>{price.toLocaleString('ko-KR')}원</S.Price>
+            </S.HeaderRight>
+          </S.Header>
 
-        {description && <S.Description>{description}</S.Description>}
+          {description && <S.Description>{description}</S.Description>}
 
-        <S.InfoSection>
-          <S.InfoBox>
-            <S.InfoLabel>강사</S.InfoLabel>
-            <S.InfoValue>{instructorName}</S.InfoValue>
-          </S.InfoBox>
+          <S.InfoSection>
+            <S.InfoBox>
+              <S.InfoLabel>강사</S.InfoLabel>
+              <S.InfoValue>{instructorName}</S.InfoValue>
+            </S.InfoBox>
 
-          <S.InfoBox>
-            <S.InfoLabel>수강 인원</S.InfoLabel>
-            <S.InfoValue>
-              <S.CurrentStudents>{currentStudents}</S.CurrentStudents>
-              <S.Separator>/</S.Separator>
-              <S.MaxStudents>{maxStudents}명</S.MaxStudents>
-            </S.InfoValue>
-          </S.InfoBox>
-        </S.InfoSection>
-      </S.Wrapper>
-    </S.Container>
+            <S.InfoBox>
+              <S.InfoLabel>수강 인원</S.InfoLabel>
+              <S.InfoValue>
+                <S.CurrentStudents>{currentStudents}</S.CurrentStudents>
+                <S.Separator>/</S.Separator>
+                <S.MaxStudents>{maxStudents}명</S.MaxStudents>
+              </S.InfoValue>
+            </S.InfoBox>
+          </S.InfoSection>
+        </S.Wrapper>
+      </S.Container>
+      <ErrorBoundary>
+        <Modal
+          mounted={mounted}
+          opened={opened}
+          onClose={handleUnmountModal}
+          onUnmount={handleUnmountModal}
+          size="lg"
+        >
+          <Suspense fallback={<LoadingSpinner />}>
+            <CourseDetail courseId={id} />
+          </Suspense>
+        </Modal>
+      </ErrorBoundary>
+    </>
   );
 }
 

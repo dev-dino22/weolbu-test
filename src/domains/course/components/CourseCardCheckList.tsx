@@ -1,33 +1,30 @@
 import { coursesQuery, type CourseListParams } from '@apis/courses';
 import Button from '@components/actions/Button';
 import LoadingSpinner from '@components/assets/LoadingSpinner';
-import Modal from '@components/modal/Modal';
-import { useModal } from '@components/modal/useModal';
 import { useShowToast } from '@components/toast/ToastProvider';
-import CourseDetail from '@domains/course/detail/components/CourseDetail';
-import ErrorBoundary from '@domains/errorboundary/ErrorBoundary';
 import styled from '@emotion/styled';
-import { Suspense, useEffect, useRef, useState } from 'react';
-import CourseCardList from './CourseCardList';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import {
+  CheckCoursesProvider,
+  useCheckCourses,
+} from '../context/CheckCoursesContext';
+import CourseCardList from './courseList/CourseCardList';
 
 type Props = {
   params?: CourseListParams;
 };
 
-function CourseCardCheckList({ params }: Props) {
+function CourseCardCheckListContent({ params }: Props) {
   const showToast = useShowToast();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     coursesQuery.useCoursesInfiniteQuery(params);
   const batchEnrollMutation = coursesQuery.useBatchEnrollMutation();
-  const { mounted, opened, handleOpenModal, handleUnmountModal } = useModal();
 
   const observerTarget = useRef<HTMLDivElement>(null);
   const throttleTimer = useRef<NodeJS.Timeout | null>(null);
 
-  const [selectedCourseIds, setSelectedCourseIds] = useState<Set<number>>(
-    new Set()
-  );
-  const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
+  const { selectedCourseIds, clearSelection, setFailedCourses } =
+    useCheckCourses();
 
   useEffect(() => {
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
@@ -60,7 +57,7 @@ function CourseCardCheckList({ params }: Props) {
     };
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  const handleEnroll = () => {
+  const handleEnroll = useCallback(() => {
     if (selectedCourseIds.size === 0) {
       showToast({ mode: 'ERROR', message: '수강 신청할 강의를 선택해주세요.' });
       return;
@@ -78,14 +75,14 @@ function CourseCardCheckList({ params }: Props) {
               mode: 'SUCCESS',
               message: `${successCount}개 강의 수강 신청이 완료되었습니다.`,
             });
-            setSelectedCourseIds(new Set());
+            clearSelection();
           } else if (successCount > 0 && failedCount > 0) {
             showToast({
               mode: 'WARN',
               message: `${successCount}개 강의는 신청 완료, ${failedCount}개 강의는 신청 실패했습니다.`,
             });
-            const failedIds = new Set(response.failed.map(f => f.courseId));
-            setSelectedCourseIds(failedIds);
+            const failedIds = response.failed.map(f => f.courseId);
+            setFailedCourses(failedIds);
           } else {
             showToast({
               mode: 'ERROR',
@@ -110,9 +107,18 @@ function CourseCardCheckList({ params }: Props) {
         },
       }
     );
-  };
+  }, [
+    selectedCourseIds,
+    batchEnrollMutation,
+    showToast,
+    clearSelection,
+    setFailedCourses,
+  ]);
 
-  const allCourses = data.pages.flatMap(page => page.content);
+  const allCourses = useMemo(
+    () => data.pages.flatMap(page => page.content),
+    [data.pages]
+  );
   const totalElements = data.pages[0]?.totalElements || 0;
 
   if (allCourses.length === 0) {
@@ -125,30 +131,7 @@ function CourseCardCheckList({ params }: Props) {
 
   return (
     <S.Container>
-      <CourseCardList
-        data={data}
-        setSelectedCourseId={setSelectedCourseId}
-        setSelectedCourseIds={setSelectedCourseIds}
-        selectedCourseIds={selectedCourseIds}
-        handleOpenModal={handleOpenModal}
-      />
-      <ErrorBoundary>
-        <Suspense fallback={<LoadingSpinner />}>
-          <Modal
-            mounted={mounted}
-            opened={opened}
-            onClose={handleUnmountModal}
-            onUnmount={handleUnmountModal}
-            size="lg"
-          >
-            {selectedCourseId && (
-              <Suspense fallback={<LoadingSpinner />}>
-                <CourseDetail courseId={selectedCourseId} />
-              </Suspense>
-            )}
-          </Modal>
-        </Suspense>
-      </ErrorBoundary>
+      <CourseCardList data={data} />
 
       <S.ObserverTarget ref={observerTarget} />
 
@@ -181,6 +164,14 @@ function CourseCardCheckList({ params }: Props) {
   );
 }
 
+function CourseCardCheckList(props: Props) {
+  return (
+    <CheckCoursesProvider>
+      <CourseCardCheckListContent {...props} />
+    </CheckCoursesProvider>
+  );
+}
+
 export default CourseCardCheckList;
 
 const S = {
@@ -207,6 +198,17 @@ const S = {
   ButtonGroup: styled.div`
     display: flex;
     gap: ${({ theme }) => theme.GAP.level3};
+  `,
+
+  CardGrid: styled.div`
+    width: 100%;
+    display: grid;
+    gap: ${({ theme }) => theme.GAP.level6};
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+
+    @media (width <= 768px) {
+      grid-template-columns: 1fr;
+    }
   `,
 
   EmptyContainer: styled.div`

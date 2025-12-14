@@ -1,6 +1,6 @@
 import Button from '@components/actions/Button';
 import LoadingSpinner from '@components/assets/LoadingSpinner';
-import CourseCardCheckList from '@domains/course/components/courseList/CourseCardCheckList';
+import CourseCardCheckList from '@domains/course/components/CourseCardCheckList';
 import ErrorBoundary from '@domains/errorboundary/ErrorBoundary';
 import styled from '@emotion/styled';
 import { ROUTE_PATH } from '@routes/routePath';
