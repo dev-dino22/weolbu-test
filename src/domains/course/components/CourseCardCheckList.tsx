@@ -2,9 +2,13 @@ import { coursesQuery, type CourseListParams } from '@apis/courses';
 import Button from '@components/actions/Button';
 import LoadingSpinner from '@components/assets/LoadingSpinner';
 import { useShowToast } from '@components/toast/ToastProvider';
+import Modal from '@components/modal/Modal';
+import { useModal } from '@components/modal/useModal';
+import CourseDetail from '@domains/course/detail/components/CourseDetail';
 import styled from '@emotion/styled';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, Suspense } from 'react';
 import CourseCard from './CourseCard';
+import ErrorBoundary from '@domains/errorboundary/ErrorBoundary';
 
 type Props = {
   params?: CourseListParams;
@@ -15,6 +19,7 @@ function CourseCardCheckList({ params }: Props) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     coursesQuery.useCoursesInfiniteQuery(params);
   const batchEnrollMutation = coursesQuery.useBatchEnrollMutation();
+  const { mounted, opened, handleOpenModal, handleUnmountModal } = useModal();
 
   const observerTarget = useRef<HTMLDivElement>(null);
   const throttleTimer = useRef<NodeJS.Timeout | null>(null);
@@ -22,6 +27,7 @@ function CourseCardCheckList({ params }: Props) {
   const [selectedCourseIds, setSelectedCourseIds] = useState<Set<number>>(
     new Set()
   );
+  const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
 
   useEffect(() => {
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
@@ -64,6 +70,11 @@ function CourseCardCheckList({ params }: Props) {
       }
       return newSet;
     });
+  };
+
+  const handleCardClick = (courseId: number) => {
+    setSelectedCourseId(courseId);
+    handleOpenModal();
   };
 
   const handleEnroll = () => {
@@ -140,10 +151,28 @@ function CourseCardCheckList({ params }: Props) {
               isCheckable
               isChecked={selectedCourseIds.has(course.id)}
               onCheckChange={handleCheckChange}
+              onClick={() => handleCardClick(course.id)}
             />
           ))
         )}
       </S.CardGrid>
+      <ErrorBoundary>
+        <Suspense fallback={<LoadingSpinner />}>
+          <Modal
+            mounted={mounted}
+            opened={opened}
+            onClose={handleUnmountModal}
+            onUnmount={handleUnmountModal}
+            size="lg"
+          >
+            {selectedCourseId && (
+              <Suspense fallback={<LoadingSpinner />}>
+                <CourseDetail courseId={selectedCourseId} />
+              </Suspense>
+            )}
+          </Modal>
+        </Suspense>
+      </ErrorBoundary>
 
       <S.ObserverTarget ref={observerTarget} />
 
@@ -188,9 +217,9 @@ const S = {
 
   EnrollButtonBox: styled.div`
     width: 100%;
-    position: sticky;
     display: flex;
     justify-content: center;
+    position: sticky;
     bottom: 24px;
   `,
 
@@ -207,10 +236,10 @@ const S = {
   CardGrid: styled.div`
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: ${({ theme }) => theme.GAP.level6};
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
 
-    @media (max-width: 768px) {
+    @media (width <= 768px) {
       grid-template-columns: 1fr;
     }
   `,
@@ -219,8 +248,8 @@ const S = {
     width: 100%;
     min-height: 400px;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 
     padding: ${({ theme }) => theme.PADDING.p8};
 
@@ -236,27 +265,29 @@ const S = {
 
   PaginationInfo: styled.div`
     width: 100%;
+
     padding: ${({ theme }) => theme.PADDING.p4};
+
+    background-color: ${({ theme }) => theme.PALETTE.gray[5]};
 
     color: ${({ theme }) => theme.PALETTE.gray[60]};
     font: ${({ theme }) => theme.FONTS.body.small};
     text-align: center;
-
-    background-color: ${({ theme }) => theme.PALETTE.gray[5]};
     border-radius: ${({ theme }) => theme.RADIUS.small};
   `,
 
   ObserverTarget: styled.div`
-    height: 20px;
     width: 100%;
+    height: 20px;
   `,
 
   LoadingContainer: styled.div`
     width: 100%;
-    padding: ${({ theme }) => theme.PADDING.p6};
     display: flex;
     justify-content: center;
     align-items: center;
+
+    padding: ${({ theme }) => theme.PADDING.p6};
   `,
 
   LoadingMessage: styled.p`

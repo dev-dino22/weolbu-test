@@ -1,4 +1,4 @@
-import { SIZE_MAP, SizeType } from './constants';
+import { SIZE_MAP, type SizeType } from './constants';
 
 type Props = {
   size?: SizeType;

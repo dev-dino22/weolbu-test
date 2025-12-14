@@ -91,16 +91,15 @@ const S = {
   Container: styled.div`
     width: 100%;
     max-width: 800px;
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: ${({ theme }) => theme.GAP.level7};
 
+    margin: 0 auto;
+
     padding: ${({ theme }) => theme.PADDING.p8};
 
     background-color: ${({ theme }) => theme.PALETTE.gray[0]};
-    border: 1px solid ${({ theme }) => theme.PALETTE.gray[10]};
-    border-radius: ${({ theme }) => theme.RADIUS.large};
   `,
 
   Header: styled.div`
@@ -108,15 +107,16 @@ const S = {
     justify-content: space-between;
     align-items: flex-start;
     gap: ${({ theme }) => theme.GAP.level4};
+
     padding-bottom: ${({ theme }) => theme.PADDING.p6};
     border-bottom: 2px solid ${({ theme }) => theme.PALETTE.gray[10]};
   `,
 
   TitleSection: styled.div`
     display: flex;
+    flex: 1;
     align-items: center;
     gap: ${({ theme }) => theme.GAP.level3};
-    flex: 1;
   `,
 
   Title: styled.h1`
@@ -126,7 +126,9 @@ const S = {
 
   FullBadge: styled.span`
     padding: 4px 12px;
+
     background-color: ${({ theme }) => theme.PALETTE.gray[30]};
+
     color: ${({ theme }) => theme.PALETTE.gray[0]};
     font: ${({ theme }) => theme.FONTS.body.xsmall_bold};
     border-radius: ${({ theme }) => theme.RADIUS.small};
@@ -134,7 +136,7 @@ const S = {
 
   Price: styled.div`
     color: ${({ theme }) => theme.PALETTE.primary[60]};
-    font: ${({ theme }) => theme.FONTS.heading.xsmall};
+    font: ${({ theme }) => theme.FONTS.heading.small};
     white-space: nowrap;
   `,
 
@@ -152,8 +154,8 @@ const S = {
   Description: styled.p`
     color: ${({ theme }) => theme.PALETTE.gray[70]};
     font: ${({ theme }) => theme.FONTS.body.medium};
-    line-height: 1.8;
     white-space: pre-wrap;
+    line-height: 1.8;
   `,
 
   InfoSection: styled.div`
@@ -164,10 +166,10 @@ const S = {
 
   InfoGrid: styled.div`
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
     gap: ${({ theme }) => theme.GAP.level5};
+    grid-template-columns: repeat(2, 1fr);
 
-    @media (max-width: 768px) {
+    @media (width <= 768px) {
       grid-template-columns: 1fr;
     }
   `,
@@ -176,7 +178,9 @@ const S = {
     display: flex;
     flex-direction: column;
     gap: ${({ theme }) => theme.GAP.level2};
+
     padding: ${({ theme }) => theme.PADDING.p4};
+
     background-color: ${({ theme }) => theme.PALETTE.gray[5]};
     border-radius: ${({ theme }) => theme.RADIUS.medium};
   `,
@@ -190,6 +194,7 @@ const S = {
     display: flex;
     align-items: center;
     gap: ${({ theme }) => theme.GAP.level2};
+
     color: ${({ theme }) => theme.PALETTE.gray[90]};
     font: ${({ theme }) => theme.FONTS.body.medium_bold};
   `,

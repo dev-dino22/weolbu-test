@@ -6,7 +6,7 @@ type Props = {
   isCheckable?: boolean;
   isChecked?: boolean;
   onCheckChange?: (courseId: number, checked: boolean) => void;
-  onEnrollClick?: (courseId: number) => void;
+  onClick?: () => void;
 };
 
 function CourseCard({
@@ -14,7 +14,7 @@ function CourseCard({
   isCheckable,
   isChecked,
   onCheckChange,
-  onEnrollClick,
+  onClick,
 }: Props) {
   const {
     id,
@@ -36,10 +36,11 @@ function CourseCard({
             checked={isChecked}
             onChange={e => onCheckChange?.(id, e.target.checked)}
             disabled={isFull}
+            onClick={e => e.stopPropagation()}
           />
         </S.CheckboxWrapper>
       )}
-      <S.Wrapper>
+      <S.Wrapper onClick={onClick}>
         <S.Header>
           <S.Title>
             {isFull && <S.FullBadge>마감</S.FullBadge>}
@@ -86,17 +87,18 @@ const S = {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: ${({ theme }) => theme.GAP.level5};
     justify-content: space-between;
+    gap: ${({ theme }) => theme.GAP.level5};
     position: relative;
 
     padding: ${({ theme }) => theme.PADDING.p6};
+    border: 1px solid ${({ theme }) => theme.PALETTE.gray[10]};
 
     background-color: ${({ theme }) => theme.PALETTE.gray[0]};
-    border: 1px solid ${({ theme }) => theme.PALETTE.gray[10]};
-    border-radius: ${({ theme }) => theme.RADIUS.medium};
 
     transition: all 0.2s ease;
+    border-radius: ${({ theme }) => theme.RADIUS.medium};
+    cursor: pointer;
 
     &:hover {
       border-color: ${({ theme }) => theme.PALETTE.primary[30]};
@@ -106,18 +108,19 @@ const S = {
 
   Header: styled.div`
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     gap: ${({ theme }) => theme.GAP.level3};
   `,
 
   Title: styled.h3`
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: ${({ theme }) => theme.GAP.level2};
+
     color: ${({ theme }) => theme.PALETTE.gray[100]};
     font: ${({ theme }) => theme.FONTS.body.large_bold};
-    flex: 1;
-    display: flex;
-    gap: ${({ theme }) => theme.GAP.level2};
-    align-items: center;
   `,
 
   HeaderRight: styled.div`
@@ -163,6 +166,7 @@ const S = {
     display: flex;
     align-items: center;
     gap: ${({ theme }) => theme.GAP.level2};
+
     color: ${({ theme }) => theme.PALETTE.gray[90]};
     font: ${({ theme }) => theme.FONTS.body.medium};
   `,
