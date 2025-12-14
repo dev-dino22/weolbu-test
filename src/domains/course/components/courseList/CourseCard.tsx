@@ -1,3 +1,4 @@
+import React from 'react';
 import type { Course } from '@apis/courses';
 import styled from '@emotion/styled';
 
@@ -6,16 +7,10 @@ type Props = {
   isCheckable?: boolean;
   isChecked?: boolean;
   onCheckChange?: (courseId: number, checked: boolean) => void;
-  onClick?: () => void;
+  onClick?: (id: number) => void;
 };
 
-function CourseCard({
-  course,
-  isCheckable,
-  isChecked,
-  onCheckChange,
-  onClick,
-}: Props) {
+function CourseCard({ course, onClick }: Props) {
   const {
     id,
     title,
@@ -29,18 +24,7 @@ function CourseCard({
 
   return (
     <S.Container>
-      {isCheckable && (
-        <S.CheckboxWrapper>
-          <S.Checkbox
-            type="checkbox"
-            checked={isChecked}
-            onChange={e => onCheckChange?.(id, e.target.checked)}
-            disabled={isFull}
-            onClick={e => e.stopPropagation()}
-          />
-        </S.CheckboxWrapper>
-      )}
-      <S.Wrapper onClick={onClick}>
+      <S.Wrapper onClick={() => onClick?.(id)}>
         <S.Header>
           <S.Title>
             {isFull && <S.FullBadge>마감</S.FullBadge>}
@@ -73,7 +57,15 @@ function CourseCard({
   );
 }
 
-export default CourseCard;
+const areEqual = (prev: Props, next: Props) => {
+  if (prev.course.id !== next.course.id) return false;
+  if (prev.course.currentStudents !== next.course.currentStudents) return false;
+  if (prev.course.isFull !== next.course.isFull) return false;
+  if (prev.course.price !== next.course.price) return false;
+  return true;
+};
+
+export default React.memo(CourseCard, areEqual);
 
 const S = {
   Container: styled.div`
@@ -186,18 +178,5 @@ const S = {
   Price: styled.span`
     color: ${({ theme }) => theme.PALETTE.primary[50]};
     font: ${({ theme }) => theme.FONTS.body.large_bold};
-  `,
-
-  CheckboxWrapper: styled.div``,
-
-  Checkbox: styled.input`
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-
-    &:disabled {
-      cursor: not-allowed;
-      opacity: 0.5;
-    }
   `,
 };

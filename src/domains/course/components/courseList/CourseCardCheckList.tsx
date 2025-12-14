@@ -1,14 +1,14 @@
 import { coursesQuery, type CourseListParams } from '@apis/courses';
 import Button from '@components/actions/Button';
 import LoadingSpinner from '@components/assets/LoadingSpinner';
-import { useShowToast } from '@components/toast/ToastProvider';
 import Modal from '@components/modal/Modal';
 import { useModal } from '@components/modal/useModal';
+import { useShowToast } from '@components/toast/ToastProvider';
 import CourseDetail from '@domains/course/detail/components/CourseDetail';
-import styled from '@emotion/styled';
-import { useEffect, useRef, useState, Suspense } from 'react';
-import CourseCard from './CourseCard';
 import ErrorBoundary from '@domains/errorboundary/ErrorBoundary';
+import styled from '@emotion/styled';
+import { Suspense, useEffect, useRef, useState } from 'react';
+import CourseCardList from './CourseCardList';
 
 type Props = {
   params?: CourseListParams;
@@ -59,23 +59,6 @@ function CourseCardCheckList({ params }: Props) {
       }
     };
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
-
-  const handleCheckChange = (courseId: number, checked: boolean) => {
-    setSelectedCourseIds(prev => {
-      const newSet = new Set(prev);
-      if (checked) {
-        newSet.add(courseId);
-      } else {
-        newSet.delete(courseId);
-      }
-      return newSet;
-    });
-  };
-
-  const handleCardClick = (courseId: number) => {
-    setSelectedCourseId(courseId);
-    handleOpenModal();
-  };
 
   const handleEnroll = () => {
     if (selectedCourseIds.size === 0) {
@@ -142,20 +125,13 @@ function CourseCardCheckList({ params }: Props) {
 
   return (
     <S.Container>
-      <S.CardGrid>
-        {data.pages.map((page, pageIndex) =>
-          page.content.map((course, courseIndex) => (
-            <CourseCard
-              key={`${pageIndex}-${course.id}-${courseIndex}`}
-              course={course}
-              isCheckable
-              isChecked={selectedCourseIds.has(course.id)}
-              onCheckChange={handleCheckChange}
-              onClick={() => handleCardClick(course.id)}
-            />
-          ))
-        )}
-      </S.CardGrid>
+      <CourseCardList
+        data={data}
+        setSelectedCourseId={setSelectedCourseId}
+        setSelectedCourseIds={setSelectedCourseIds}
+        selectedCourseIds={selectedCourseIds}
+        handleOpenModal={handleOpenModal}
+      />
       <ErrorBoundary>
         <Suspense fallback={<LoadingSpinner />}>
           <Modal
@@ -231,17 +207,6 @@ const S = {
   ButtonGroup: styled.div`
     display: flex;
     gap: ${({ theme }) => theme.GAP.level3};
-  `,
-
-  CardGrid: styled.div`
-    width: 100%;
-    display: grid;
-    gap: ${({ theme }) => theme.GAP.level6};
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-
-    @media (width <= 768px) {
-      grid-template-columns: 1fr;
-    }
   `,
 
   EmptyContainer: styled.div`
