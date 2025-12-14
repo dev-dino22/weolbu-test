@@ -66,42 +66,6 @@ const S = {
     }
   `,
 
-  LoadingContainer: styled.div`
-    width: 100%;
-    min-height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background-color: ${({ theme }) => theme.PALETTE.gray[5]};
-    border-radius: ${({ theme }) => theme.RADIUS.medium};
-  `,
-
-  LoadingMessage: styled.p`
-    color: ${({ theme }) => theme.PALETTE.gray[70]};
-    font: ${({ theme }) => theme.FONTS.body.large};
-  `,
-
-  ErrorContainer: styled.div`
-    width: 100%;
-    min-height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: ${({ theme }) => theme.PADDING.p8};
-
-    background-color: ${({ theme }) => theme.PALETTE.red[50]};
-    border-radius: ${({ theme }) => theme.RADIUS.medium};
-  `,
-
-  ErrorMessage: styled.p`
-    color: ${({ theme }) => theme.PALETTE.red[50]};
-    font: ${({ theme }) => theme.FONTS.body.large};
-    text-align: center;
-    line-height: 1.6;
-  `,
-
   EmptyContainer: styled.div`
     width: 100%;
     min-height: 400px;

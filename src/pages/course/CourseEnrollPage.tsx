@@ -95,22 +95,4 @@ const S = {
     color: ${({ theme }) => theme.PALETTE.gray[100]};
     font: ${({ theme }) => theme.FONTS.heading.small};
   `,
-  SortSelect: styled.select`
-    padding: 8px 12px;
-
-    background-color: ${({ theme }) => theme.PALETTE.gray[0]};
-
-    color: ${({ theme }) => theme.PALETTE.gray[70]};
-    font: ${({ theme }) => theme.FONTS.body.medium};
-
-    border: 1px solid ${({ theme }) => theme.PALETTE.gray[30]};
-    border-radius: ${({ theme }) => theme.RADIUS.small};
-
-    cursor: pointer;
-
-    &:focus {
-      outline: none;
-      border-color: ${({ theme }) => theme.PALETTE.primary[50]};
-    }
-  `,
 };
