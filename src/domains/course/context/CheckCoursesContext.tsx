@@ -58,7 +58,7 @@ export function useCheckCourses() {
   const context = useContext(CheckCoursesContext);
   if (!context) {
     throw new Error(
-      'useCheckCourses must be used within a CheckCoursesProvider'
+      'useCheckCourses 훅은 CheckCoursesProvider 내부에서만 사용해주세요.'
     );
   }
   return context;

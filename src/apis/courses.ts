@@ -139,7 +139,6 @@ export const coursesQuery = {
       queryFn: () => courses.getCourseDetail(courseId),
     });
   },
-  // TODO: SuspenseInfiniteQuery 수정
   useCoursesInfiniteQuery: (params?: CourseListParams) => {
     const { size = 10, sort = 'recent' } = params || {};
 

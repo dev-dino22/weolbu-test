@@ -67,7 +67,13 @@ function CourseCard({ course }: Props) {
           onUnmount={handleUnmountModal}
           size="lg"
         >
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense
+            fallback={
+              <S.LoadingBox>
+                <LoadingSpinner />
+              </S.LoadingBox>
+            }
+          >
             <CourseDetail courseId={id} />
           </Suspense>
         </Modal>
@@ -196,5 +202,9 @@ const S = {
   Price: styled.span`
     color: ${({ theme }) => theme.PALETTE.primary[50]};
     font: ${({ theme }) => theme.FONTS.body.large_bold};
+  `,
+  LoadingBox: styled.div`
+    width: 100%;
+    height: 400px;
   `,
 };

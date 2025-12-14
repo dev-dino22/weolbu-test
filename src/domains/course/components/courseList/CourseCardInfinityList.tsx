@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
-import styled from '@emotion/styled';
-import CourseCardList from './CourseCardList';
 import { coursesQuery, type CourseListParams } from '@apis/courses';
 import LoadingSpinner from '@components/assets/LoadingSpinner';
-import { useInfinityScroll } from '../../hooks/useInfinityScroll';
+import styled from '@emotion/styled';
+import { useMemo } from 'react';
+import { useInfinityScroll } from '../../../../shared/hooks/useInfinityScroll';
+import CourseCardCheckList from './CourseCardCheckList';
 
 type Props = {
   params?: CourseListParams;
@@ -34,7 +34,7 @@ function CourseCardInfinityList({ params }: Props) {
 
   return (
     <>
-      <CourseCardList data={data} />
+      <CourseCardCheckList data={data} />
       <S.ObserverTarget ref={observerTarget} />
       {!hasNextPage && allCourses.length > 0 ? (
         <S.PaginationInfo>

@@ -2,8 +2,8 @@ import styled from '@emotion/styled';
 import { equalByKeys } from '@utils/deepEqual';
 import React from 'react';
 import { useCheckCourses } from '../../context/CheckCoursesContext';
-import CourseCard from './CourseCard';
-import CourseCheckbox from './CourseCheckBox';
+import CourseCard from './courseCard/CourseCard';
+import CourseCheckbox from './courseCard/CourseCheckBox';
 import type { CourseListResponse, Course } from '@apis/courses';
 
 type InfiniteQueryData = {
@@ -11,7 +11,7 @@ type InfiniteQueryData = {
   pageParams: unknown[];
 };
 
-function CourseCardList({ data }: { data: InfiniteQueryData }) {
+function CourseCardCheckList({ data }: { data: InfiniteQueryData }) {
   const { selectedCourseIds, toggleSelection } = useCheckCourses();
 
   type ItemProps = {
@@ -32,11 +32,7 @@ function CourseCardList({ data }: { data: InfiniteQueryData }) {
               onToggle={onToggle}
             />
           </S.CheckboxWrapper>
-          <CourseCard
-            course={course}
-            isChecked={isChecked}
-            onCheckChange={onToggle}
-          />
+          <CourseCard course={course} />
         </S.ItemBox>
       );
     },
@@ -74,7 +70,7 @@ function CourseCardList({ data }: { data: InfiniteQueryData }) {
   );
 }
 
-export default CourseCardList;
+export default CourseCardCheckList;
 
 const S = {
   CardList: styled.div`

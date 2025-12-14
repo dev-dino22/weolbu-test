@@ -14,7 +14,7 @@ export function useInfinityScroll({
   throttleMs = 500,
 }: UseInfinityScrollParams) {
   const observerTarget = useRef<HTMLDivElement>(null);
-  const throttleTimer = useRef<NodeJS.Timeout | null>(null);
+  const throttleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!fetchNextPage) return;

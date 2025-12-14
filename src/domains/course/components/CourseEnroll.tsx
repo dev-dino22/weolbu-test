@@ -17,7 +17,7 @@ function CourseCardCheckListContent({ params }: Props) {
   );
 }
 
-function CourseCardCheckList({ params }: Props) {
+function CourseEnroll({ params }: Props) {
   return (
     <CheckCoursesProvider>
       <CourseCardCheckListContent params={params} />
@@ -25,7 +25,7 @@ function CourseCardCheckList({ params }: Props) {
   );
 }
 
-export default CourseCardCheckList;
+export default CourseEnroll;
 
 const S = {
   Container: styled.div`

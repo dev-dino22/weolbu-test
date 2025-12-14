@@ -1,16 +1,16 @@
+import type { CourseSortType } from '@apis/courses';
 import Button from '@components/actions/Button';
+import {
+  RadioButton,
+  RadioGroup,
+} from '@components/actions/Input/UncontrolledRadio';
 import LoadingSpinner from '@components/assets/LoadingSpinner';
-import CourseCardCheckList from '@domains/course/components/CourseCardCheckList';
+import CourseEnroll from '@domains/course/components/CourseEnroll';
 import ErrorBoundary from '@domains/errorboundary/ErrorBoundary';
 import styled from '@emotion/styled';
 import { ROUTE_PATH } from '@routes/routePath';
 import { Suspense, useState } from 'react';
 import { useNavigate } from 'react-router';
-import type { CourseSortType } from '@apis/courses';
-import {
-  RadioButton,
-  RadioGroup,
-} from '@components/actions/Input/UncontrolledRadio';
 
 function CourseEnrollPage() {
   const navigate = useNavigate();
@@ -63,7 +63,7 @@ function CourseEnrollPage() {
         </RadioGroup>
         <ErrorBoundary>
           <Suspense fallback={<LoadingSpinner />}>
-            <CourseCardCheckList params={{ sort: sortType }} />
+            <CourseEnroll params={{ sort: sortType }} />
           </Suspense>
         </ErrorBoundary>
       </S.ListContainer>
