@@ -2,7 +2,7 @@ import { ROUTE_PATH } from '@routes/routePath';
 
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router';
-import { useAuth } from '@domains/auth/login/context/AuthProvider';
+import { useAuth } from '@domains/auth/context/AuthProvider';
 
 function Header() {
   const navigate = useNavigate();

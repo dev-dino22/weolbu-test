@@ -17,10 +17,7 @@ import Main from '@pages/main/MainPage';
 import SignUpPage from '@pages/auth/signUp/SignUpPage';
 import ToastProvider from '@components/toast/ToastProvider';
 import LoginPage from '@pages/auth/login/LoginPage';
-import {
-  AuthProvider,
-  useAuth,
-} from '@domains/auth/login/context/AuthProvider';
+import { AuthProvider, useAuth } from '@domains/auth/context/AuthProvider';
 import CourseCreatePage from '@pages/course/CourseCreatePage';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@apis/queryClient';

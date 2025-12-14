@@ -2,7 +2,7 @@ import { type CourseListParams } from '@apis/courses';
 import styled from '@emotion/styled';
 import BatchEnrollButton from './BatchEnrollButton';
 import CourseCardInfinityList from '@domains/course/components/courseList/CourseCardInfinityList';
-import { CheckCoursesProvider } from '@domains/course/components/courseList/context/CheckCoursesContext';
+import { CheckCoursesProvider } from '@domains/course/context/CheckCoursesContext';
 type Props = {
   params?: CourseListParams;
 };

@@ -11,8 +11,8 @@ import { ROUTE_PATH } from '@routes/routePath';
 import { useShowToast } from '@components/toast/ToastProvider';
 import { users } from '@apis/users';
 import { ApiError } from '@apis/apiClient';
-import { useAuth } from '@domains/auth/login/context/AuthProvider';
-import { signUpFormRules } from '@domains/auth/utils/signUpFormRules';
+import { useAuth } from '@domains/auth/context/AuthProvider';
+import { signUpFormRules } from '@domains/auth/validation';
 
 type SignUpFormData = {
   name: string;
