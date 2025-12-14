@@ -220,8 +220,6 @@ const S = {
 
     padding: ${({ theme }) => theme.LAYOUT.headerHeight}
       ${({ theme }) => theme.PADDING.p8};
-
-    background-color: ${({ theme }) => theme.PALETTE.gray[0]};
   `,
   Title: styled.h1`
     color: ${({ theme }) => theme.PALETTE.gray[100]};
