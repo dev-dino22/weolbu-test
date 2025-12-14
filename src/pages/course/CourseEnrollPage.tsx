@@ -4,27 +4,65 @@ import CourseCardCheckList from '@domains/course/components/CourseCardCheckList'
 import ErrorBoundary from '@domains/errorboundary/ErrorBoundary';
 import styled from '@emotion/styled';
 import { ROUTE_PATH } from '@routes/routePath';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { useNavigate } from 'react-router';
+import type { CourseSortType } from '@apis/courses';
+import {
+  RadioButton,
+  RadioGroup,
+} from '@components/actions/Input/UncontrolledRadio';
 
 function CourseEnrollPage() {
   const navigate = useNavigate();
+  const [sortType, setSortType] = useState<CourseSortType>('recent');
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSortType(e.target.value as CourseSortType);
+  };
 
   return (
     <S.Container>
       <S.Header>
         <S.Title>강의 목록</S.Title>
-        <Button
-          variant="outlined"
-          size="sm"
-          onClick={() => navigate(ROUTE_PATH.COURSE_CREATE)}
-        >
-          + 강의 등록
-        </Button>
+        <S.HeaderRight>
+          <Button
+            variant="outlined"
+            size="sm"
+            onClick={() => navigate(ROUTE_PATH.COURSE_CREATE)}
+          >
+            + 강의 등록
+          </Button>
+        </S.HeaderRight>
       </S.Header>
       <ErrorBoundary>
         <Suspense fallback={<LoadingSpinner />}>
-          <CourseCardCheckList />
+          <RadioGroup legend="정렬 방식">
+            <RadioButton
+              name="sortType"
+              value="recent"
+              checked={sortType === 'recent'}
+              onChange={handleSortChange}
+            >
+              최신순
+            </RadioButton>
+            <RadioButton
+              name="sortType"
+              value="popular"
+              checked={sortType === 'popular'}
+              onChange={handleSortChange}
+            >
+              인기순
+            </RadioButton>
+            <RadioButton
+              name="sortType"
+              value="rate"
+              checked={sortType === 'rate'}
+              onChange={handleSortChange}
+            >
+              신청률순
+            </RadioButton>
+          </RadioGroup>
+          <CourseCardCheckList params={{ sort: sortType }} />
         </Suspense>
       </ErrorBoundary>
     </S.Container>
@@ -48,8 +86,31 @@ const S = {
     align-items: center;
     gap: ${({ theme }) => theme.GAP.level4};
   `,
+  HeaderRight: styled.div`
+    display: flex;
+    align-items: center;
+    gap: ${({ theme }) => theme.GAP.level3};
+  `,
   Title: styled.h1`
     color: ${({ theme }) => theme.PALETTE.gray[100]};
     font: ${({ theme }) => theme.FONTS.heading.small};
+  `,
+  SortSelect: styled.select`
+    padding: 8px 12px;
+
+    background-color: ${({ theme }) => theme.PALETTE.gray[0]};
+
+    color: ${({ theme }) => theme.PALETTE.gray[70]};
+    font: ${({ theme }) => theme.FONTS.body.medium};
+
+    border: 1px solid ${({ theme }) => theme.PALETTE.gray[30]};
+    border-radius: ${({ theme }) => theme.RADIUS.small};
+
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+      border-color: ${({ theme }) => theme.PALETTE.primary[50]};
+    }
   `,
 };
