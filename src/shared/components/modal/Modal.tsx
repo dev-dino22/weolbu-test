@@ -40,7 +40,7 @@ function Modal({
       document.body.style.overflow = '';
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [opened]);
+  }, [opened, onClose]);
 
   if (!mounted) return;
   const modalRoot = document.querySelector('#modal') as HTMLElement;

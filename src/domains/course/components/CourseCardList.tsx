@@ -1,20 +1,9 @@
+import { coursesQuery } from '@apis/courses';
 import styled from '@emotion/styled';
 import CourseCard from './CourseCard';
-import { coursesQuery, type CourseListParams } from '@apis/courses';
-import { useNavigate } from 'react-router';
-import { ROUTE_PATH } from '@routes/routePath';
 
-type Props = {
-  params?: CourseListParams;
-};
-
-function CourseCardList({ params }: Props) {
-  const navigate = useNavigate();
+function CourseCardList() {
   const { data } = coursesQuery.useCoursesSuspenseQuery();
-
-  const handleEnrollClick = (courseId: number) => {
-    navigate(`${ROUTE_PATH.COURSE_ENROLL}?courseId=${courseId}`);
-  };
 
   if (data.content.length === 0) {
     return (
@@ -28,11 +17,7 @@ function CourseCardList({ params }: Props) {
     <S.Container>
       <S.CardGrid>
         {data.content.map(course => (
-          <CourseCard
-            key={course.id}
-            course={course}
-            onEnrollClick={handleEnrollClick}
-          />
+          <CourseCard key={course.id} course={course} />
         ))}
       </S.CardGrid>
       <S.PaginationInfo>
