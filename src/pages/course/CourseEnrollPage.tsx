@@ -5,7 +5,7 @@ import {
   RadioGroup,
 } from '@components/actions/Input/UncontrolledRadio';
 import LoadingSpinner from '@components/assets/LoadingSpinner';
-import CourseEnroll from '@domains/course/components/CourseEnroll';
+import CourseEnroll from '@domains/course/enroll/components/CourseEnroll';
 import ErrorBoundary from '@domains/errorboundary/ErrorBoundary';
 import styled from '@emotion/styled';
 import { ROUTE_PATH } from '@routes/routePath';

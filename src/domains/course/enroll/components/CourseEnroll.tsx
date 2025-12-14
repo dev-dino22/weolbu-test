@@ -1,9 +1,8 @@
 import { type CourseListParams } from '@apis/courses';
 import styled from '@emotion/styled';
-import { CheckCoursesProvider } from '../context/CheckCoursesContext';
 import BatchEnrollButton from './BatchEnrollButton';
-import CourseCardInfinityList from './courseList/CourseCardInfinityList';
-
+import CourseCardInfinityList from '@domains/course/components/courseList/CourseCardInfinityList';
+import { CheckCoursesProvider } from '@domains/course/components/courseList/context/CheckCoursesContext';
 type Props = {
   params?: CourseListParams;
 };

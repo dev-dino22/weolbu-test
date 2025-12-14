@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { equalByKeys } from '@utils/deepEqual';
 import React from 'react';
-import { useCheckCourses } from '../../context/CheckCoursesContext';
+import { useCheckCourses } from './context/CheckCoursesContext';
 import CourseCard from './courseCard/CourseCard';
 import CourseCheckbox from './courseCard/CourseCheckBox';
 import type { CourseListResponse, Course } from '@apis/courses';

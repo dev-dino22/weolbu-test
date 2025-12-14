@@ -2,8 +2,8 @@ import { coursesQuery } from '@apis/courses';
 import Button from '@components/actions/Button';
 import { useShowToast } from '@components/toast/ToastProvider';
 import { useCallback } from 'react';
-import { useCheckCourses } from '../context/CheckCoursesContext';
-import { getEnrollResultMessage } from '../enroll/utils/getEnrollResultMessage';
+import { useCheckCourses } from '../../components/courseList/context/CheckCoursesContext';
+import { getEnrollResultMessage } from '../utils/getEnrollResultMessage';
 import styled from '@emotion/styled';
 
 function BatchEnrollButton() {
