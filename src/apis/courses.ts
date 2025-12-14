@@ -97,6 +97,14 @@ export const courses = {
     return data;
   },
 
+  getCourseDetail: async (courseId: number) => {
+    const data = await apiClient.get<Course>(`${BASE_PATH}/${courseId}`);
+
+    if (!data) throw new Error('강의 상세 조회 응답이 없습니다');
+
+    return data;
+  },
+
   postBatchEnroll: async (enrollData: BatchEnrollRequest) => {
     const data = await apiClient.post<BatchEnrollResponse>(
       'enrollments/batch',
@@ -114,6 +122,8 @@ export const courseKeys = {
   lists: () => [...courseKeys.all, 'list'] as const,
   list: (filters?: Record<string, unknown>) =>
     [...courseKeys.lists(), filters] as const,
+  details: () => [...courseKeys.all, 'detail'] as const,
+  detail: (id: number) => [...courseKeys.details(), id] as const,
 };
 
 export const coursesQuery = {
@@ -121,6 +131,12 @@ export const coursesQuery = {
     return useSuspenseQuery({
       queryKey: courseKeys.lists(),
       queryFn: () => courses.getCourses(),
+    });
+  },
+  useCourseDetailSuspenseQuery: (courseId: number) => {
+    return useSuspenseQuery({
+      queryKey: courseKeys.detail(courseId),
+      queryFn: () => courses.getCourseDetail(courseId),
     });
   },
   // TODO: SuspenseInfiniteQuery 수정
