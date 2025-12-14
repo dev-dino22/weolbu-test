@@ -7,6 +7,7 @@ import { ROUTE_PATH } from '@routes/routePath';
 import { useShowToast } from '@components/toast/ToastProvider';
 import { ApiError } from '@apis/apiClient';
 import { coursesQuery } from '@apis/courses';
+import { courseCreateFormRules } from '@domains/course/validation';
 
 type CourseFormData = {
   title: string;
@@ -60,11 +61,6 @@ function CourseCreatePage() {
     }
   };
 
-  const formatNumber = (value: string) => {
-    const numbers = value.replace(/[^\d]/g, '');
-    return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  };
-
   return (
     <S.Container>
       <S.Title>강의 개설</S.Title>
@@ -75,29 +71,14 @@ function CourseCreatePage() {
           required
           error={!!errors.title}
           feedbackMessage={errors.title?.message}
-          {...register('title', {
-            required: '강의명을 입력해주세요',
-            minLength: {
-              value: 2,
-              message: '강의명은 최소 2자 이상이어야 합니다',
-            },
-            maxLength: {
-              value: 100,
-              message: '강의명은 최대 100자까지 입력 가능합니다',
-            },
-          })}
+          {...register('title', courseCreateFormRules.title)}
         />
         <UncontrolledInput
           label="강의 설명"
           placeholder="React의 기본 개념부터 Hooks까지 배웁니다."
           error={!!errors.description}
           feedbackMessage={errors.description?.message}
-          {...register('description', {
-            maxLength: {
-              value: 500,
-              message: '강의 설명은 최대 500자까지 입력 가능합니다',
-            },
-          })}
+          {...register('description', courseCreateFormRules.description)}
         />
         <UncontrolledInput
           label="강사명"
@@ -105,17 +86,7 @@ function CourseCreatePage() {
           required
           error={!!errors.instructorName}
           feedbackMessage={errors.instructorName?.message}
-          {...register('instructorName', {
-            required: '강사명을 입력해주세요',
-            minLength: {
-              value: 2,
-              message: '강사명은 최소 2자 이상이어야 합니다',
-            },
-            maxLength: {
-              value: 10,
-              message: '강사명은 최대 10자까지 입력 가능합니다',
-            },
-          })}
+          {...register('instructorName', courseCreateFormRules.instructorName)}
         />
         <UncontrolledInput
           label="최대 수강 인원"
@@ -124,18 +95,7 @@ function CourseCreatePage() {
           required
           error={!!errors.maxStudents}
           feedbackMessage={errors.maxStudents?.message}
-          {...register('maxStudents', {
-            required: '최대 수강 인원을 입력해주세요',
-            min: {
-              value: 1,
-              message: '최소 1명 이상이어야 합니다',
-            },
-            max: {
-              value: 1000,
-              message: '최대 1000명까지 가능합니다',
-            },
-            valueAsNumber: true,
-          })}
+          {...register('maxStudents', courseCreateFormRules.maxStudents)}
         />
         <UncontrolledInput
           label="가격 (원)"
@@ -144,25 +104,7 @@ function CourseCreatePage() {
           required
           error={!!errors.price}
           feedbackMessage={errors.price?.message}
-          {...register('price', {
-            required: '가격을 입력해주세요',
-            validate: value => {
-              const numValue = Number(String(value).replace(/,/g, ''));
-              if (isNaN(numValue)) return '올바른 가격을 입력해주세요';
-              if (numValue < 0) return '가격은 0원 이상이어야 합니다';
-              if (numValue > 10000000) return '가격은 1000만원 이하여야 합니다';
-
-              return true;
-            },
-            onChange: e => {
-              const formatted = formatNumber(e.target.value);
-              e.target.value = formatted;
-            },
-            setValueAs: value => {
-              const numValue = String(value).replace(/,/g, '');
-              return Number(numValue);
-            },
-          })}
+          {...register('price', courseCreateFormRules.price)}
         />
         <S.ButtonGroup>
           <Button
