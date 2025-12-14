@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import styled from '@emotion/styled';
 import CourseCardList from './CourseCardList';
 import { coursesQuery, type CourseListParams } from '@apis/courses';
 import LoadingSpinner from '@components/assets/LoadingSpinner';
+import { useInfinityScroll } from '../../hooks/useInfinityScroll';
 
 type Props = {
   params?: CourseListParams;
@@ -10,41 +11,12 @@ type Props = {
 function CourseCardInfinityList({ params }: Props) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     coursesQuery.useCoursesInfiniteQuery(params);
-  const observerTarget = useRef<HTMLDivElement>(null);
-  const throttleTimer = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    if (!fetchNextPage) return;
-
-    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
-      if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-        if (throttleTimer.current) return;
-
-        throttleTimer.current = setTimeout(() => {
-          fetchNextPage();
-          throttleTimer.current = null;
-        }, 500);
-      }
-    };
-
-    const observer = new IntersectionObserver(handleIntersection, {
-      threshold: 0.1,
-    });
-
-    const currentTarget = observerTarget.current;
-    if (currentTarget) {
-      observer.observe(currentTarget);
-    }
-
-    return () => {
-      if (currentTarget) {
-        observer.unobserve(currentTarget);
-      }
-      if (throttleTimer.current) {
-        clearTimeout(throttleTimer.current);
-      }
-    };
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+  const { observerTarget } = useInfinityScroll({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  });
 
   const allCourses = useMemo(
     () => data.pages.flatMap(page => page.content),
