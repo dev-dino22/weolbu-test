@@ -1,30 +1,21 @@
 import { coursesQuery, type CourseListParams } from '@apis/courses';
-import Button from '@components/actions/Button';
 import LoadingSpinner from '@components/assets/LoadingSpinner';
-import { useShowToast } from '@components/toast/ToastProvider';
 import styled from '@emotion/styled';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
-import {
-  CheckCoursesProvider,
-  useCheckCourses,
-} from '../context/CheckCoursesContext';
+import { useEffect, useMemo, useRef } from 'react';
+import { CheckCoursesProvider } from '../context/CheckCoursesContext';
 import CourseCardList from './courseList/CourseCardList';
+import BatchEnrollButton from './BatchEnrollButton';
 
 type Props = {
   params?: CourseListParams;
 };
 
 function CourseCardCheckListContent({ params }: Props) {
-  const showToast = useShowToast();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     coursesQuery.useCoursesInfiniteQuery(params);
-  const batchEnrollMutation = coursesQuery.useBatchEnrollMutation();
 
   const observerTarget = useRef<HTMLDivElement>(null);
   const throttleTimer = useRef<NodeJS.Timeout | null>(null);
-
-  const { selectedCourseIds, clearSelection, setFailedCourses } =
-    useCheckCourses();
 
   useEffect(() => {
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
@@ -57,64 +48,6 @@ function CourseCardCheckListContent({ params }: Props) {
     };
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  const handleEnroll = useCallback(() => {
-    if (selectedCourseIds.size === 0) {
-      showToast({ mode: 'ERROR', message: '수강 신청할 강의를 선택해주세요.' });
-      return;
-    }
-
-    batchEnrollMutation.mutate(
-      { courseIds: Array.from(selectedCourseIds) },
-      {
-        onSuccess: response => {
-          const successCount = response.success.length;
-          const failedCount = response.failed.length;
-
-          if (successCount > 0 && failedCount === 0) {
-            showToast({
-              mode: 'SUCCESS',
-              message: `${successCount}개 강의 수강 신청이 완료되었습니다.`,
-            });
-            clearSelection();
-          } else if (successCount > 0 && failedCount > 0) {
-            showToast({
-              mode: 'WARN',
-              message: `${successCount}개 강의는 신청 완료, ${failedCount}개 강의는 신청 실패했습니다.`,
-            });
-            const failedIds = response.failed.map(f => f.courseId);
-            setFailedCourses(failedIds);
-          } else {
-            showToast({
-              mode: 'ERROR',
-              message: '모든 강의 수강 신청에 실패했습니다.',
-            });
-          }
-
-          if (failedCount > 0) {
-            response.failed.forEach(failed => {
-              showToast({
-                mode: 'ERROR',
-                message: `강의 ID ${failed.courseId}: ${failed.reason}`,
-              });
-            });
-          }
-        },
-        onError: () => {
-          showToast({
-            mode: 'ERROR',
-            message: '수강 신청 중 오류가 발생했습니다.',
-          });
-        },
-      }
-    );
-  }, [
-    selectedCourseIds,
-    batchEnrollMutation,
-    showToast,
-    clearSelection,
-    setFailedCourses,
-  ]);
-
   const allCourses = useMemo(
     () => data.pages.flatMap(page => page.content),
     [data.pages]
@@ -132,15 +65,7 @@ function CourseCardCheckListContent({ params }: Props) {
   return (
     <S.Container>
       <CourseCardList data={data} />
-
       <S.ObserverTarget ref={observerTarget} />
-
-      {isFetchingNextPage && (
-        <S.LoadingContainer>
-          <S.LoadingMessage>강의 목록을 불러오는 중...</S.LoadingMessage>
-        </S.LoadingContainer>
-      )}
-
       {!hasNextPage && allCourses.length > 0 ? (
         <S.PaginationInfo>
           총 {totalElements}개의 강의를 모두 불러왔습니다.
@@ -148,18 +73,7 @@ function CourseCardCheckListContent({ params }: Props) {
       ) : (
         <LoadingSpinner />
       )}
-      <S.EnrollButtonBox>
-        <Button
-          onClick={handleEnroll}
-          disabled={
-            selectedCourseIds.size === 0 || batchEnrollMutation.isPending
-          }
-        >
-          {batchEnrollMutation.isPending
-            ? '신청 중...'
-            : `${selectedCourseIds.size}개 수강 신청`}
-        </Button>
-      </S.EnrollButtonBox>
+      <BatchEnrollButton />
     </S.Container>
   );
 }
@@ -180,14 +94,6 @@ const S = {
     display: flex;
     flex-direction: column;
     gap: ${({ theme }) => theme.GAP.level6};
-  `,
-
-  EnrollButtonBox: styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    position: sticky;
-    bottom: 24px;
   `,
 
   SelectionInfo: styled.div`
