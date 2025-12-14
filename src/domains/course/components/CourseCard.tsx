@@ -6,9 +6,16 @@ type Props = {
   isCheckable?: boolean;
   isChecked?: boolean;
   onCheckChange?: (courseId: number, checked: boolean) => void;
+  onEnrollClick?: (courseId: number) => void;
 };
 
-function CourseCard({ course, isCheckable, isChecked, onCheckChange }: Props) {
+function CourseCard({
+  course,
+  isCheckable,
+  isChecked,
+  onCheckChange,
+  onEnrollClick,
+}: Props) {
   const {
     id,
     title,
@@ -19,10 +26,6 @@ function CourseCard({ course, isCheckable, isChecked, onCheckChange }: Props) {
     isFull,
     price,
   } = course;
-
-  const formatPrice = (price: number) => {
-    return price.toLocaleString('ko-KR');
-  };
 
   return (
     <S.Container>
@@ -43,7 +46,7 @@ function CourseCard({ course, isCheckable, isChecked, onCheckChange }: Props) {
             {title}
           </S.Title>
           <S.HeaderRight>
-            <S.Price>{formatPrice(price)}원</S.Price>
+            <S.Price>{price.toLocaleString('ko-KR')}원</S.Price>
           </S.HeaderRight>
         </S.Header>
 

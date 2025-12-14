@@ -35,8 +35,6 @@ function CourseCardList({ params }: Props) {
           />
         ))}
       </S.CardGrid>
-
-      {/* TODO: 무한 스크롤로 바꾸기*/}
       <S.PaginationInfo>
         총 {data.totalElements}개의 강의 (페이지 {data.pageable.pageNumber + 1}/
         {data.totalPages})
