@@ -79,6 +79,7 @@ const S = {
     display: flex;
     flex-direction: column;
     gap: ${({ theme }) => theme.GAP.level6};
+
     padding: ${({ theme }) => theme.LAYOUT.headerHeight}
       ${({ theme }) => theme.PADDING.p8};
   `,

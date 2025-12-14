@@ -56,10 +56,10 @@ const S = {
   CardGrid: styled.div`
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: ${({ theme }) => theme.GAP.level6};
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
 
-    @media (max-width: 768px) {
+    @media (width <= 768px) {
       grid-template-columns: 1fr;
     }
   `,
@@ -68,8 +68,8 @@ const S = {
     width: 100%;
     min-height: 400px;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 
     padding: ${({ theme }) => theme.PADDING.p8};
 
@@ -85,13 +85,14 @@ const S = {
 
   PaginationInfo: styled.div`
     width: 100%;
+
     padding: ${({ theme }) => theme.PADDING.p4};
+
+    background-color: ${({ theme }) => theme.PALETTE.gray[5]};
 
     color: ${({ theme }) => theme.PALETTE.gray[60]};
     font: ${({ theme }) => theme.FONTS.body.small};
     text-align: center;
-
-    background-color: ${({ theme }) => theme.PALETTE.gray[5]};
     border-radius: ${({ theme }) => theme.RADIUS.small};
   `,
 };

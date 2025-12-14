@@ -41,6 +41,9 @@ const S = {
     width: ${({ size }) => SIZE[size].width};
     height: ${({ size }) => SIZE[size].height};
 
+    border: ${({ theme, variant }) =>
+      variant === 'outlined' ? `1px solid ${theme.PALETTE.gray[40]}` : 'none'};
+
     background-color: ${({ theme, variant }) =>
       variant === 'outlined'
         ? theme.PALETTE.gray[0]
@@ -50,9 +53,6 @@ const S = {
       variant === 'outlined' ? theme.PALETTE.gray[60] : theme.PALETTE.gray[0]};
 
     font: ${({ size }) => SIZE[size].font};
-
-    border: ${({ theme, variant }) =>
-      variant === 'outlined' ? `1px solid ${theme.PALETTE.gray[40]}` : 'none'};
 
     border-radius: ${({ theme }) => theme.RADIUS.small};
 

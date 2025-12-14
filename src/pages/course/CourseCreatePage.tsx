@@ -212,6 +212,7 @@ const S = {
   ButtonGroup: styled.div`
     display: flex;
     gap: ${({ theme }) => theme.GAP.level4};
+
     margin-top: ${({ theme }) => theme.GAP.level4};
 
     > button {
