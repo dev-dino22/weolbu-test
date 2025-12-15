@@ -29,8 +29,19 @@
 
 ## 시작하기
 
+### 1. Docker를 실행하고 다음 명령어를 실행합니다.
+
 ```
-npm run build && npm run preview
+# 1. API 애플리케이션 이미지 로드
+docker load -i backend_mock.tar
+# 2. 서버 실행
+docker run --rm -p 8080:8080 backend_mock_for_assignment-api:latest
+```
+
+### 2. 프로젝트 폴더 터미널에서 다음 명령어를 실행합니다.
+
+```
+npm i && npm run build && npm run preview
 ```
 
 ## 📝 TODO: 구현 기능
