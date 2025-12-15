@@ -69,7 +69,7 @@ const S = {
   `,
 
   EmptyMessage: styled.p`
-    color: ${({ theme }) => theme.PALETTE.gray[50]};
+    color: ${({ theme }) => theme.PALETTE.gray[70]};
     font: ${({ theme }) => theme.FONTS.body.large};
     text-align: center;
   `,

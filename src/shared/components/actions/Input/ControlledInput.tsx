@@ -91,7 +91,7 @@ const S = {
     align-items: center;
     gap: ${({ theme }) => theme.GAP.level2};
 
-    color: ${({ theme }) => theme.PALETTE.gray[50]};
+    color: ${({ theme }) => theme.PALETTE.gray[70]};
     font: ${({ theme }) => theme.FONTS.body.small};
 
     &::after {

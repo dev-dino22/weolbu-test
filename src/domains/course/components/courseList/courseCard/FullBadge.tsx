@@ -12,7 +12,7 @@ const S = {
 
     padding: 4px 12px;
 
-    background-color: ${({ theme }) => theme.PALETTE.gray[30]};
+    background-color: ${({ theme }) => theme.PALETTE.gray[80]};
 
     color: ${({ theme }) => theme.PALETTE.gray[0]};
     font: ${({ theme }) => theme.FONTS.body.xsmall_bold};

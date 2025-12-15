@@ -177,7 +177,7 @@ const S = {
   `,
 
   InfoLabel: styled.span`
-    color: ${({ theme }) => theme.PALETTE.gray[50]};
+    color: ${({ theme }) => theme.PALETTE.gray[70]};
     font: ${({ theme }) => theme.FONTS.body.small};
   `,
 
