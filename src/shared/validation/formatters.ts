@@ -1,5 +1,7 @@
 export const formatter = {
   toPhoneNumber,
+  toPrice,
+  toDate,
 };
 
 function toPhoneNumber(value: string): string {
@@ -17,4 +19,17 @@ function toPhoneNumber(value: string): string {
       7
     )}-${limitedNumbers.slice(7)}`;
   }
+}
+
+function toPrice(price: number): string {
+  return price.toLocaleString('ko-KR');
+}
+
+function toDate(dateString: string): string {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 }

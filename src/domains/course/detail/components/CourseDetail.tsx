@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { coursesQuery } from '@apis/courses';
 import Button from '@components/actions/Button';
+import { formatter } from '@validation/formatters';
 
 type Props = {
   courseId: number;
@@ -10,19 +11,6 @@ type Props = {
 function CourseDetail({ courseId, onEnrollClick }: Props) {
   const { data: course } = coursesQuery.useCourseDetailSuspenseQuery(courseId);
 
-  const formatPrice = (price: number) => {
-    return price.toLocaleString('ko-KR');
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('ko-KR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  };
-
   return (
     <S.Container>
       <S.Header>
@@ -30,7 +18,7 @@ function CourseDetail({ courseId, onEnrollClick }: Props) {
           <S.Title>{course.title}</S.Title>
           {course.isFull && <S.FullBadge>마감</S.FullBadge>}
         </S.TitleSection>
-        <S.Price>{formatPrice(course.price)}원</S.Price>
+        <S.Price>{formatter.toPrice(course.price)}원</S.Price>
       </S.Header>
 
       {course.description && (
@@ -66,7 +54,7 @@ function CourseDetail({ courseId, onEnrollClick }: Props) {
 
           <S.InfoItem>
             <S.InfoLabel>개설일</S.InfoLabel>
-            <S.InfoValue>{formatDate(course.createdAt)}</S.InfoValue>
+            <S.InfoValue>{formatter.toDate(course.createdAt)}</S.InfoValue>
           </S.InfoItem>
         </S.InfoGrid>
       </S.InfoSection>
