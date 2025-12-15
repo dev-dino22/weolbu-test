@@ -1,11 +1,5 @@
+import { createQueryString, joinAsPath } from '@utils/createUrl';
 import { apiClient } from './apiClient';
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-  useSuspenseInfiniteQuery,
-} from '@tanstack/react-query';
-import { createQueryString } from '@utils/createUrl';
 
 const BASE_PATH = 'courses';
 
@@ -104,7 +98,9 @@ export const courses = {
   },
 
   getCourseDetail: async (courseId: number) => {
-    const data = await apiClient.get<Course>(`${BASE_PATH}/${courseId}`);
+    const data = await apiClient.get<Course>(
+      joinAsPath(BASE_PATH, courseId.toString())
+    );
 
     if (!data) throw new Error('강의 상세 조회 응답이 없습니다');
 
@@ -113,7 +109,7 @@ export const courses = {
 
   postEnroll: async (courseId: number) => {
     const data = await apiClient.post<EnrollResponse>(
-      `${BASE_PATH}/${courseId}/enroll`,
+      joinAsPath(BASE_PATH, courseId.toString(), 'enroll'),
       {}
     );
 
@@ -131,73 +127,5 @@ export const courses = {
     if (!data) throw new Error('수강 신청 응답이 없습니다');
 
     return data;
-  },
-};
-
-export const courseKeys = {
-  all: ['courses'] as const,
-  lists: () => [...courseKeys.all, 'list'] as const,
-  list: (filters?: Record<string, unknown>) =>
-    [...courseKeys.lists(), filters] as const,
-  details: () => [...courseKeys.all, 'detail'] as const,
-  detail: (id: number) => [...courseKeys.details(), id] as const,
-};
-
-export const coursesQuery = {
-  useCoursesSuspenseQuery: () => {
-    return useSuspenseQuery({
-      queryKey: courseKeys.lists(),
-      queryFn: () => courses.getCourses(),
-    });
-  },
-  useCourseDetailSuspenseQuery: (courseId: number) => {
-    return useSuspenseQuery({
-      queryKey: courseKeys.detail(courseId),
-      queryFn: () => courses.getCourseDetail(courseId),
-    });
-  },
-  useCoursesInfiniteQuery: (params?: CourseListParams) => {
-    const { size = 10, sort = 'recent' } = params || {};
-
-    return useSuspenseInfiniteQuery({
-      queryKey: courseKeys.list({ size, sort }),
-      queryFn: ({ pageParam = 0 }) =>
-        courses.getCourses({ page: pageParam, size, sort }),
-      getNextPageParam: lastPage => {
-        if (lastPage.last) return undefined;
-        return lastPage.pageable.pageNumber + 1;
-      },
-      initialPageParam: 0,
-    });
-  },
-  useCreateCourseMutation: () => {
-    const queryClient = useQueryClient();
-
-    return useMutation({
-      mutationFn: (data: CreateCourseRequest) => courses.postCourse(data),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: courseKeys.lists() });
-      },
-    });
-  },
-  useEnrollMutation: () => {
-    const queryClient = useQueryClient();
-
-    return useMutation({
-      mutationFn: (courseId: number) => courses.postEnroll(courseId),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: courseKeys.lists() });
-      },
-    });
-  },
-  useBatchEnrollMutation: () => {
-    const queryClient = useQueryClient();
-
-    return useMutation({
-      mutationFn: (data: BatchEnrollRequest) => courses.postBatchEnroll(data),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: courseKeys.lists() });
-      },
-    });
   },
 };

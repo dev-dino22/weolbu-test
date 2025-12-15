@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
-import { coursesQuery } from '@apis/courses';
 import { formatter } from '@validation/formatters';
 import CourseEnrollButton from './CourseEnrollButton';
 import FullBadge from '@domains/course/components/courseList/courseCard/FullBadge';
+import { coursesQuery } from '@apis/queries/coursesQuery';
 
 type Props = {
   courseId: number;

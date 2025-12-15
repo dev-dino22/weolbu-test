@@ -1,9 +1,10 @@
-import { coursesQuery, type CourseListParams } from '@apis/courses';
 import LoadingSpinner from '@components/assets/LoadingSpinner';
 import styled from '@emotion/styled';
 import { useMemo } from 'react';
 import { useInfinityScroll } from '../../../../shared/hooks/useInfinityScroll';
 import CourseCardCheckList from './CourseCardCheckList';
+import type { CourseListParams } from '@apis/courses';
+import { coursesQuery } from '@apis/queries/coursesQuery';
 
 type Props = {
   params?: CourseListParams;

@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router';
 import { ROUTE_PATH } from '@routes/routePath';
 import { useShowToast } from '@components/toast/ToastProvider';
 import { ApiError } from '@apis/apiClient';
-import { coursesQuery } from '@apis/courses';
 import { courseCreateFormRules } from '@domains/course/validation';
+import { coursesQuery } from '@apis/queries/coursesQuery';
 
 type CourseFormData = {
   title: string;
@@ -32,7 +32,7 @@ function CourseCreateForm() {
 
   const onSubmit: SubmitHandler<CourseFormData> = async data => {
     try {
-      await createCourseMutation.mutateAsync({
+      await createCourseMutation.mutate({
         title: data.title,
         description: data.description,
         instructorName: data.instructorName,

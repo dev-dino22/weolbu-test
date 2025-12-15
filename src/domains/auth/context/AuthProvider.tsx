@@ -29,7 +29,7 @@ export function AuthProvider({ children }: Props) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkAuth = async () => {
+    const checkAuth = () => {
       const token = accessToken.get();
       if (token) {
         accessToken.save(token);

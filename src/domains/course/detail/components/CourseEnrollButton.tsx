@@ -1,5 +1,5 @@
 import { ApiError } from '@apis/apiClient';
-import { coursesQuery } from '@apis/courses';
+import { coursesQuery } from '@apis/queries/coursesQuery';
 import Button from '@components/actions/Button';
 import { useShowToast } from '@components/toast/ToastProvider';
 import { useCallback } from 'react';
@@ -42,16 +42,13 @@ function CourseEnrollButton({ courseId, isFull }: Props) {
     });
   }, [courseId, isFull, enrollMutation, showToast]);
 
+  if (isFull) {
+    return <Button disabled={isFull}>마감된 강의입니다</Button>;
+  }
+
   return (
-    <Button
-      onClick={handleEnroll}
-      disabled={isFull || enrollMutation.isPending}
-    >
-      {enrollMutation.isPending
-        ? '신청 중...'
-        : isFull
-        ? '마감된 강의입니다'
-        : '수강 신청하기'}
+    <Button onClick={handleEnroll} disabled={enrollMutation.isPending}>
+      {enrollMutation.isPending ? '신청 중...' : '수강 신청하기'}
     </Button>
   );
 }
