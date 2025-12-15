@@ -30,7 +30,7 @@ function CourseDetail({ courseId }: Props) {
 
         <S.InfoSection>
           <S.SectionTitle>강의 정보</S.SectionTitle>
-          <S.InfoGrid>
+          <S.InfoWrapper>
             <S.InfoItem>
               <S.InfoLabel>강사</S.InfoLabel>
               <S.InfoValue>{course.instructorName}</S.InfoValue>
@@ -56,7 +56,7 @@ function CourseDetail({ courseId }: Props) {
               <S.InfoLabel>개설일</S.InfoLabel>
               <S.InfoValue>{formatter.toDate(course.createdAt)}</S.InfoValue>
             </S.InfoItem>
-          </S.InfoGrid>
+          </S.InfoWrapper>
         </S.InfoSection>
 
         <S.ButtonWrapper>
@@ -155,10 +155,10 @@ const S = {
     gap: ${({ theme }) => theme.GAP.level4};
   `,
 
-  InfoGrid: styled.div`
-    display: grid;
+  InfoWrapper: styled.div`
+    display: flex;
+    flex-direction: column;
     gap: ${({ theme }) => theme.GAP.level5};
-    grid-template-columns: repeat(2, 1fr);
 
     @media (width <= 768px) {
       grid-template-columns: 1fr;
