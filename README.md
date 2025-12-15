@@ -13,7 +13,20 @@
 강사는 강의를 등록하고, 수강생과 강사 모두가 무한 스크롤/정렬 기능이 있는 강의 목록에서 여러 강의를 선택해 수강 신청할 수 있습니다.
 이 과정에서 재사용 가능한 구조, 높은 코드 품질, 테스트 코드 및 문서화를 통해 실제 서비스 운영 수준의 프론트엔드를 구현하는 것이 목표입니다.
 
+| | |
+|---|---|
+| <img width="1290" height="2796" alt="localhost_5173_courses_enroll(iPhone 14 Pro Max) (2)" src="https://github.com/user-attachments/assets/874dd949-82f0-4618-98b0-afaaccc30f2a" /> | <img width="1290" height="2796" alt="localhost_5173_courses_enroll(iPhone 14 Pro Max) (1)" src="https://github.com/user-attachments/assets/4ca4d8a6-e6f5-4f2f-ad00-f18ef5673b44" /> |
+
+| | | |
+|---|---|---|
+| <img width="1290" height="2796" alt="localhost_5173_courses_enroll(iPhone 14 Pro Max) (5)" src="https://github.com/user-attachments/assets/b4e599ce-7339-4038-8d7d-c359d80cf392" /> | <img width="1290" height="2796" alt="localhost_5173_courses_enroll(iPhone 14 Pro Max) (4)" src="https://github.com/user-attachments/assets/01a6a7c3-7a13-416d-b63d-5341538736db" /> | <img width="1290" height="2796" alt="localhost_5173_courses_enroll(iPhone 14 Pro Max) (3)" src="https://github.com/user-attachments/assets/db6fee26-7a83-47b7-be66-9a44a51001c9" /> |
+
+
+
 <br>
+
+<img width="728" height="270" alt="image" src="https://github.com/user-attachments/assets/2888a245-8469-4761-9db5-665c9a55abf3" />
+
 
 ## 📝 TODO: 구현 기능
 
@@ -80,6 +93,7 @@
 
 성능 개선
 
+- [x] 적절한 메모이제이션으로 체크 선택 시 리렌더링 범위 최소화
 - [x] 무한 스크롤 이벤트에 디바운스 적용(인터섹션 옵저버의 호출의 딜레이를 위해)
 - [x] 로딩 스피너 도입
 - [x] Modal 강제 리플로우 제거
@@ -301,10 +315,11 @@ TanStack Query는 프론트엔드 생태계에서 가장 널리 사용되는 서
 **강력한 기능 세트**
 캐싱, 요청 중복 제거, 자동 재시도, 리페치 정책, 무한 스크롤 등 과제 요구사항과 실제 서비스에서 자주 필요한 기능들을 기본으로 제공해, 직접 인프라를 구현하는 비용을 줄일 수 있음
 
+## 입력 폼 라이브러리: React-hook-form
 ### React-hook-form 선택 이유
 
 **선언적인 검증 로직**
 입력값 검증을 register 옵션과 스키마 기반 설정으로 선언적으로 작성할 수 있어, 각 필드별 규칙(필수 여부, 길이, 패턴 등)을 한곳에 모아 관리할 가능
 
 **불필요한 리렌더링 방지**
-React 상태 업데이트를 최소화하여 폼 입력 시 전체 컴포넌트가 매번 리렌더링되는 문제 개선
+비제어 컴포넌트로 React 상태 업데이트를 최소화하여 폼 입력 시 전체 컴포넌트가 매번 리렌더링되는 문제 개선
