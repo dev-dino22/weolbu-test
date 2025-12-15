@@ -34,7 +34,7 @@ function CourseCardInfinityList({ params }: Props) {
 
   return (
     <>
-      <CourseCardCheckList data={data} />
+      <CourseCardCheckList pages={data.pages} />
       <S.ObserverTarget ref={observerTarget} />
       {!hasNextPage && allCourses.length > 0 ? (
         <S.PaginationInfo>

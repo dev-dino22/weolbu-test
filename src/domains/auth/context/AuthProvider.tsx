@@ -10,21 +10,21 @@ import {
 import { ACCESS_TOKEN_STORAGE_NAME, accessToken } from '../storage/authStorage';
 import { users, type LoginRequest } from '@apis/users';
 
-interface AuthContextType {
+type AuthContextType = {
   loggedIn: boolean;
   loading: boolean;
   login: (credentials: LoginRequest) => Promise<void>;
   logoutUser: () => void;
   hasToken: () => boolean;
-}
+};
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-interface AuthProviderProps {
+type Props = {
   children: ReactNode;
-}
+};
 
-export function AuthProvider({ children }: AuthProviderProps) {
+export function AuthProvider({ children }: Props) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
 

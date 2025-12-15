@@ -6,53 +6,22 @@ import CourseCard from './courseCard/CourseCard';
 import CourseCheckbox from './courseCard/CourseCheckBox';
 import type { CourseListResponse, Course } from '@apis/courses';
 
-type InfiniteQueryData = {
+type Props = {
   pages: CourseListResponse[];
-  pageParams: unknown[];
 };
 
-function CourseCardCheckList({ data }: { data: InfiniteQueryData }) {
+type ItemProps = {
+  course: Course;
+  isChecked: boolean;
+  onToggle: (id: number, checked: boolean) => void;
+};
+
+function CourseCardCheckList({ pages }: Props) {
   const { selectedCourseIds, toggleSelection } = useCheckCourses();
-
-  type ItemProps = {
-    course: Course;
-    isChecked: boolean;
-    onToggle: (id: number, checked: boolean) => void;
-  };
-
-  const CourseListItem = React.memo(
-    function CourseListItem({ course, isChecked, onToggle }: ItemProps) {
-      return (
-        <S.ItemBox>
-          <S.CheckboxWrapper>
-            <CourseCheckbox
-              courseId={course.id}
-              checked={isChecked}
-              disabled={course.isFull}
-              onToggle={onToggle}
-            />
-          </S.CheckboxWrapper>
-          <CourseCard course={course} />
-        </S.ItemBox>
-      );
-    },
-    (prev, next) => {
-      if (
-        !equalByKeys(prev.course, next.course, [
-          'id',
-          'currentStudents',
-          'isFull',
-          'price',
-        ])
-      )
-        return false;
-      return true;
-    }
-  );
 
   return (
     <S.CardList>
-      {data.pages.map((page, pageIndex: number) =>
+      {pages.map((page, pageIndex: number) =>
         page.content.map((course, courseIndex: number) => {
           const key = `${pageIndex}-${course.id}-${courseIndex}`;
           const isChecked = selectedCourseIds.has(course.id);
@@ -69,6 +38,36 @@ function CourseCardCheckList({ data }: { data: InfiniteQueryData }) {
     </S.CardList>
   );
 }
+
+const CourseListItem = React.memo(
+  function CourseListItem({ course, isChecked, onToggle }: ItemProps) {
+    return (
+      <S.ItemBox>
+        <S.CheckboxWrapper>
+          <CourseCheckbox
+            courseId={course.id}
+            checked={isChecked}
+            disabled={course.isFull}
+            onToggle={onToggle}
+          />
+        </S.CheckboxWrapper>
+        <CourseCard course={course} />
+      </S.ItemBox>
+    );
+  },
+  (prev, next) => {
+    if (
+      !equalByKeys(prev.course, next.course, [
+        'id',
+        'currentStudents',
+        'isFull',
+        'price',
+      ])
+    )
+      return false;
+    return true;
+  }
+);
 
 export default CourseCardCheckList;
 
