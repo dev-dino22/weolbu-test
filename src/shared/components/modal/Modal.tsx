@@ -47,14 +47,16 @@ function Modal({
 
   return ReactDOM.createPortal(
     <>
-      <S.BackDrop opened={opened} onClick={onClose} />
+      <S.BackDrop opened={opened} onClick={onClose} aria-hidden="true" />
       <S.Container
+        role="dialog"
+        aria-modal="true"
         opened={opened}
         size={size}
         onClick={e => e.stopPropagation()}
       >
         {closeButton && (
-          <S.IconWrapper onClick={onUnmount}>
+          <S.IconWrapper onClick={onUnmount} aria-label="닫기">
             <Cross color={THEME.PALETTE.gray[0]} size="sm" strokeWidth={4} />
           </S.IconWrapper>
         )}
