@@ -8,8 +8,9 @@ const spin = keyframes`
 
 function LoadingSpinner() {
   return (
-    <S.Container>
-      <S.Spinner aria-label="Loading" />
+    <S.Container role="status" aria-live="polite" aria-label="로딩 중">
+      <S.Spinner />
+      <S.HiddenText>로딩 중...</S.HiddenText>
     </S.Container>
   );
 }
@@ -34,5 +35,19 @@ const S = {
     animation: ${spin} 1s linear infinite;
     border-radius: 50%;
     border-top: 4px solid ${({ theme }) => theme.PALETTE.primary[50]};
+  `,
+
+  HiddenText: styled.span`
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+
+    margin: -1px;
+    padding: 0;
+    border-width: 0;
+
+    white-space: nowrap;
+    clip: rect(0, 0, 0, 0);
   `,
 };
