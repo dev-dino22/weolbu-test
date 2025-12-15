@@ -53,7 +53,7 @@ describe('useInfinityScroll', () => {
         fetchNextPage: mockFetchNextPage,
         hasNextPage: true,
         isFetchingNextPage: false,
-        throttleMs: 500,
+        debounceMs: 500,
       })
     );
 
@@ -75,7 +75,7 @@ describe('useInfinityScroll', () => {
         fetchNextPage: mockFetchNextPage,
         hasNextPage: true,
         isFetchingNextPage: false,
-        throttleMs: 500,
+        debounceMs: 500,
       })
     );
 
@@ -95,7 +95,7 @@ describe('useInfinityScroll', () => {
         fetchNextPage: mockFetchNextPage,
         hasNextPage: false,
         isFetchingNextPage: false,
-        throttleMs: 500,
+        debounceMs: 500,
       })
     );
 
@@ -115,7 +115,7 @@ describe('useInfinityScroll', () => {
         fetchNextPage: mockFetchNextPage,
         hasNextPage: true,
         isFetchingNextPage: true,
-        throttleMs: 500,
+        debounceMs: 500,
       })
     );
 
@@ -135,7 +135,7 @@ describe('useInfinityScroll', () => {
         fetchNextPage: mockFetchNextPage,
         hasNextPage: true,
         isFetchingNextPage: false,
-        throttleMs: 500,
+        debounceMs: 500,
       })
     );
 
