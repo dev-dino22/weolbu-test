@@ -57,7 +57,9 @@ function SignUpForm() {
       navigate(ROUTE_PATH.COURSE_ENROLL);
     } catch (error) {
       if (error instanceof ApiError && error.body) {
-        const errorMessage = (error.body as { message?: string }).message;
+        const errorMessage =
+          typeof error.body.message === 'string' ? error.body.message : null;
+
         showToast({
           mode: 'ERROR',
           message: errorMessage || '회원가입에 실패했습니다.',

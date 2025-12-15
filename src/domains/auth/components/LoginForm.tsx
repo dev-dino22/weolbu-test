@@ -35,7 +35,8 @@ function LoginForm() {
       navigate(ROUTE_PATH.COURSE_ENROLL);
     } catch (error) {
       if (error instanceof ApiError && error.body) {
-        const errorMessage = (error.body as { message?: string }).message;
+        const errorMessage =
+          typeof error.body.message === 'string' ? error.body.message : null;
         showToast({
           mode: 'ERROR',
           message: errorMessage || '로그인에 실패했습니다.',
