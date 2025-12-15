@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { coursesQuery } from '@apis/courses';
 import { formatter } from '@validation/formatters';
 import CourseEnrollButton from './CourseEnrollButton';
+import FullBadge from '@domains/course/components/courseList/courseCard/FullBadge';
 
 type Props = {
   courseId: number;
@@ -14,8 +15,8 @@ function CourseDetail({ courseId }: Props) {
     <S.Container>
       <S.Header>
         <S.TitleSection>
+          {course.isFull && <FullBadge />}
           <S.Title>{course.title}</S.Title>
-          {course.isFull && <S.FullBadge>마감</S.FullBadge>}
         </S.TitleSection>
         <S.Price>{formatter.toPrice(course.price)}원</S.Price>
       </S.Header>
@@ -104,7 +105,7 @@ const S = {
   TitleSection: styled.div`
     display: flex;
     flex: 1;
-    align-items: center;
+    align-items: flex-start;
     gap: ${({ theme }) => theme.GAP.level3};
   `,
 

@@ -7,6 +7,7 @@ import Modal from '@components/modal/Modal';
 import CourseDetail from '@domains/course/detail/components/CourseDetail';
 import { useModal } from '@components/modal/useModal';
 import { equalByKeys } from '@utils/deepEqual';
+import FullBadge from './FullBadge';
 
 type Props = {
   course: Course;
@@ -32,8 +33,8 @@ function CourseCard({ course }: Props) {
         <S.Wrapper onClick={handleOpenModal}>
           <S.Header>
             <S.Title>
-              {isFull && <S.FullBadge>마감</S.FullBadge>}
-              {title}
+              {isFull && <FullBadge />}
+              <S.TitleText>{title}</S.TitleText>
             </S.Title>
             <S.HeaderRight>
               <S.Price>{price.toLocaleString('ko-KR')}원</S.Price>
@@ -93,14 +94,15 @@ export default React.memo(CourseCard, (prev: Props, next: Props) =>
 
 const S = {
   Container: styled.div`
-    width: 100%;
     display: flex;
+    justify-content: center;
     align-items: center;
     gap: ${({ theme }) => theme.GAP.level4};
   `,
 
   Wrapper: styled.div`
-    width: 100%;
+    width: 360px;
+
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -130,6 +132,7 @@ const S = {
   `,
 
   Title: styled.h3`
+    min-width: 0;
     display: flex;
     flex: 1;
     align-items: center;
@@ -139,23 +142,21 @@ const S = {
     font: ${({ theme }) => theme.FONTS.body.large_bold};
   `,
 
+  TitleText: styled.span`
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  `,
+
   HeaderRight: styled.div`
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     gap: ${({ theme }) => theme.GAP.level3};
   `,
-
-  FullBadge: styled.span`
-    padding: 4px 12px;
-
-    background-color: ${({ theme }) => theme.PALETTE.gray[30]};
-
-    color: ${({ theme }) => theme.PALETTE.gray[0]};
-    font: ${({ theme }) => theme.FONTS.body.xsmall_bold};
-
-    border-radius: ${({ theme }) => theme.RADIUS.small};
-  `,
-
   Description: styled.p`
     color: ${({ theme }) => theme.PALETTE.gray[70]};
     font: ${({ theme }) => theme.FONTS.body.medium};
@@ -165,6 +166,8 @@ const S = {
 
   InfoSection: styled.div`
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     gap: ${({ theme }) => theme.GAP.level3};
   `,
 
@@ -172,6 +175,8 @@ const S = {
     display: flex;
     align-items: center;
     gap: ${({ theme }) => theme.GAP.level4};
+
+    white-space: nowrap;
   `,
 
   InfoLabel: styled.span`
@@ -203,9 +208,10 @@ const S = {
   Price: styled.span`
     color: ${({ theme }) => theme.PALETTE.primary[50]};
     font: ${({ theme }) => theme.FONTS.body.large_bold};
+    white-space: nowrap;
   `,
   LoadingBox: styled.div`
     width: 100%;
-    height: 400px;
+    height: 80vh;
   `,
 };
