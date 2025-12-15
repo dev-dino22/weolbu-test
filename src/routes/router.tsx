@@ -5,7 +5,7 @@ import { ROUTE_PATH } from '@routes/routePath';
 import { THEME } from '@styles/global';
 import reset from '@styles/reset';
 
-import { queryClient } from '@apis/queryClient';
+import { queryClient } from '@apis/queries/queryClient';
 import ToastProvider from '@components/toast/ToastProvider';
 import { AuthProvider, useAuth } from '@domains/auth/context/AuthProvider';
 import { Global, ThemeProvider } from '@emotion/react';
@@ -45,13 +45,12 @@ function Wrapper() {
 }
 
 function ProtectedRoute() {
-  const { loggedIn, loading, hasToken, logoutUser } = useAuth();
+  const { loggedIn, loading, hasToken } = useAuth();
   const location = useLocation();
 
   if (loading) return null;
 
   if (!loggedIn || !hasToken()) {
-    logoutUser();
     return (
       <Navigate
         to={ROUTE_PATH.LOGIN}

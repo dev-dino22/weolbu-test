@@ -1,4 +1,4 @@
-import { accessToken } from '@domains/auth/storage/authStorage';
+import { accessToken } from '@domains/auth/storage/index';
 
 export type ApiHeaders = Record<string, string>;
 export type ApiBody = Record<string, unknown> | undefined;

@@ -109,8 +109,7 @@ export const courses = {
 
   postEnroll: async (courseId: number) => {
     const data = await apiClient.post<EnrollResponse>(
-      joinAsPath(BASE_PATH, courseId.toString(), 'enroll'),
-      {}
+      joinAsPath(BASE_PATH, courseId.toString(), 'enroll')
     );
 
     if (!data) throw new Error('수강 신청 응답이 없습니다');
