@@ -132,7 +132,7 @@ const S = {
     gap: ${({ theme }) => theme.GAP.level3};
   `,
 
-  Title: styled.h3`
+  Title: styled.div`
     min-width: 0;
     display: flex;
     flex: 1;
@@ -181,7 +181,7 @@ const S = {
   `,
 
   InfoLabel: styled.span`
-    color: ${({ theme }) => theme.PALETTE.gray[50]};
+    color: ${({ theme }) => theme.PALETTE.gray[70]};
     font: ${({ theme }) => theme.FONTS.body.small};
   `,
 

@@ -78,18 +78,18 @@ const S = {
     cursor: pointer;
 
     &:has(input:checked) {
-      border-color: #3b82f6;
+      border-color: ${({ theme }) => theme.PALETTE.primary[50]};
 
-      background-color: #3b82f6;
+      background-color: ${({ theme }) => theme.PALETTE.primary[60]};
     }
 
     &:has(input:checked) span {
-      color: #fff;
+      color: ${({ theme }) => theme.PALETTE.gray[0]};
       font: ${({ theme }) => theme.FONTS.body.small_bold};
     }
 
     &:has(input:focus-visible) {
-      outline: 2px solid #3b82f6;
+      outline: 2px solid ${({ theme }) => theme.PALETTE.primary[60]};
       outline-offset: 2px;
     }
 
