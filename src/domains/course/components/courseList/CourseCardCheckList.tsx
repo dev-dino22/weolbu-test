@@ -29,6 +29,7 @@ function CourseCardCheckList({ pages }: Props) {
               checked={isChecked}
               disabled={course.isFull}
               onToggle={onToggle}
+              courseTitle={course.title}
             />
           </S.CheckboxWrapper>
           <CourseCard course={course} />

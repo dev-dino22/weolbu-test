@@ -113,7 +113,7 @@ const S = {
   `,
 
   RadioText: styled.span`
-    color: #374151;
+    color: ${({ theme }) => theme.PALETTE.gray[70]};
     font: ${({ theme }) => theme.FONTS.body.medium};
 
     transition: all 0.2s ease;
