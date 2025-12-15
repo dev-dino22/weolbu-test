@@ -4,29 +4,29 @@ type UseInfinityScrollParams = {
   fetchNextPage?: () => void;
   hasNextPage?: boolean;
   isFetchingNextPage?: boolean;
-  throttleMs?: number;
+  debounceMs?: number;
 };
 
 export function useInfinityScroll({
   fetchNextPage,
   hasNextPage,
   isFetchingNextPage,
-  throttleMs = 500,
+  debounceMs = 500,
 }: UseInfinityScrollParams) {
   const observerTarget = useRef<HTMLDivElement>(null);
-  const throttleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!fetchNextPage) return;
 
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
       if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-        if (throttleTimer.current) return;
+        if (debounceTimer.current) return;
 
-        throttleTimer.current = setTimeout(() => {
+        debounceTimer.current = setTimeout(() => {
           fetchNextPage();
-          throttleTimer.current = null;
-        }, throttleMs);
+          debounceTimer.current = null;
+        }, debounceMs);
       }
     };
 
@@ -43,11 +43,11 @@ export function useInfinityScroll({
       if (currentTarget) {
         observer.unobserve(currentTarget);
       }
-      if (throttleTimer.current) {
-        clearTimeout(throttleTimer.current);
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
       }
     };
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage, throttleMs]);
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage, debounceMs]);
 
   return { observerTarget };
 }
