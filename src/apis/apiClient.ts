@@ -1,3 +1,5 @@
+import { accessToken } from '@domains/auth/storage/authStorage';
+
 export type ApiHeaders = Record<string, string>;
 export type ApiBody = Record<string, unknown> | undefined;
 export type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE';
@@ -22,7 +24,7 @@ const requestApi = async <TResponse = unknown>(
   body?: ApiBody,
   headers?: ApiHeaders
 ): Promise<TResponse | null> => {
-  const token = localStorage.getItem('token') ?? '';
+  const token = accessToken.get() ?? '';
   const response = await fetch(`${apiBaseUrl}${endPoint}`, {
     method,
     headers: {
@@ -37,7 +39,8 @@ const requestApi = async <TResponse = unknown>(
   const text = await response.text();
   if (!response.ok) {
     const body = text === '' ? undefined : JSON.parse(text);
-    throw new ApiError('요청 실패', response.status, body);
+    const errorMessage = body?.message || '요청 실패';
+    throw new ApiError(errorMessage, response.status, body);
   }
   if (response.status === 204) return null;
   if (text === '') return null;

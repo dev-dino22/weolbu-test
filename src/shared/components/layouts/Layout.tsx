@@ -8,7 +8,7 @@ type Props = {
 function Layout({ children }: Props) {
   return (
     <S.Container>
-      <S.Wrapper>{children}</S.Wrapper>
+      <S.Wrapper role="main">{children}</S.Wrapper>
     </S.Container>
   );
 }
@@ -22,14 +22,10 @@ const S = {
     min-height: 100vh;
     display: flex;
     justify-content: center;
-
-    background-color: ${({ theme }) => theme.PALETTE.gray[0]};
   `,
   Wrapper: styled.div`
     width: 100%;
     max-width: ${({ theme }) => theme.LAYOUT.maxWidth};
     min-height: 100vh;
-
-    background-color: ${({ theme }) => theme.PALETTE.gray[5]};
   `,
 };

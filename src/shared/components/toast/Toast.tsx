@@ -25,7 +25,7 @@ function Toast({ message, mode, onRemove, timeSet }: Props) {
     }, timeSet);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [onRemove, timeSet]);
   return (
     <S.Container>
       <S.ProgressBar timeSet={timeSet} mode={mode} />

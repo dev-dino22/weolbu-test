@@ -38,7 +38,9 @@ function UncontrolledInput({
           {...props}
         />
       </S.InputWrapper>
-      <S.FeedbackMessage error={error}>{feedbackMessage}</S.FeedbackMessage>
+      <S.FeedbackMessage error={error} role="alert" aria-live="polite">
+        {feedbackMessage}
+      </S.FeedbackMessage>
     </S.Container>
   );
 }
@@ -80,7 +82,7 @@ const S = {
     align-items: center;
     gap: ${({ theme }) => theme.GAP.level2};
 
-    color: ${({ theme }) => theme.PALETTE.gray[50]};
+    color: ${({ theme }) => theme.PALETTE.gray[70]};
     font: ${({ theme }) => theme.FONTS.body.small};
 
     &::after {

@@ -25,6 +25,7 @@ export default defineConfig({
       '@constants': path.resolve(__dirname, './src/shared/constants'),
       '@domains': path.resolve(__dirname, './src/domains'),
       '@widgets': path.resolve(__dirname, './src/widgets'),
+      '@validation': path.resolve(__dirname, './src/shared/validation'),
     },
   },
 });

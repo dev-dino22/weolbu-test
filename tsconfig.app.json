@@ -28,7 +28,8 @@
       "@provider/*": ["shared/provider/*"],
       "@constants/*": ["shared/constants/*"],
       "@domains/*": ["domains/*"],
-      "@widgets/*": ["widgets/*"]
+      "@widgets/*": ["widgets/*"],
+      "@validation/*": ["shared/validation/*"]
     },
 
     /* Linting */
