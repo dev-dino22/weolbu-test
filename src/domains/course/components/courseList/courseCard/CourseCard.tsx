@@ -94,15 +94,16 @@ export default React.memo(CourseCard, (prev: Props, next: Props) =>
 
 const S = {
   Container: styled.div`
+    min-width: 0;
     display: flex;
+    flex: 1;
     justify-content: center;
     align-items: center;
     gap: ${({ theme }) => theme.GAP.level4};
   `,
 
   Wrapper: styled.div`
-    width: 360px;
-
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

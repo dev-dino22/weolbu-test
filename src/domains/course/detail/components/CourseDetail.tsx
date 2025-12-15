@@ -80,7 +80,7 @@ const S = {
 
     margin: 0 auto;
 
-    padding: ${({ theme }) => theme.PADDING.p8};
+    padding: ${({ theme }) => theme.PADDING.p4};
 
     background-color: ${({ theme }) => theme.PALETTE.gray[0]};
   `,
