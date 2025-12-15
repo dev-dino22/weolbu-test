@@ -45,7 +45,7 @@ describe('useInfinityScroll', () => {
     expect(result.current.observerTarget.current).toBeNull();
   });
 
-  it('타겟이 화면에 보이고 다음 페이지가 있을 때 fetchNextPage를 호출한다', () => {
+  it('타겟이 화면에 보이고 다음 페이지가 있을 때 fetchNextPage를 즉시 호출한다', () => {
     const mockFetchNextPage = vi.fn();
 
     renderHook(() =>
@@ -61,8 +61,6 @@ describe('useInfinityScroll', () => {
       [{ isIntersecting: true } as IntersectionObserverEntry],
       {} as IntersectionObserver
     );
-
-    vi.advanceTimersByTime(500);
 
     expect(mockFetchNextPage).toHaveBeenCalledTimes(1);
   });
@@ -84,8 +82,6 @@ describe('useInfinityScroll', () => {
       {} as IntersectionObserver
     );
 
-    vi.advanceTimersByTime(500);
-
     expect(mockFetchNextPage).not.toHaveBeenCalled();
   });
 
@@ -105,8 +101,6 @@ describe('useInfinityScroll', () => {
       [{ isIntersecting: true } as IntersectionObserverEntry],
       {} as IntersectionObserver
     );
-
-    vi.advanceTimersByTime(500);
 
     expect(mockFetchNextPage).not.toHaveBeenCalled();
   });
@@ -128,12 +122,10 @@ describe('useInfinityScroll', () => {
       {} as IntersectionObserver
     );
 
-    vi.advanceTimersByTime(500);
-
     expect(mockFetchNextPage).not.toHaveBeenCalled();
   });
 
-  it('throttle 시간 내에 여러 번 호출되어도 한 번만 fetchNextPage를 실행한다', () => {
+  it('시간 내에 여러 번 호출되어도 한 번만 fetchNextPage를 실행한다', () => {
     const mockFetchNextPage = vi.fn();
 
     renderHook(() =>
@@ -149,6 +141,7 @@ describe('useInfinityScroll', () => {
       [{ isIntersecting: true } as IntersectionObserverEntry],
       {} as IntersectionObserver
     );
+    expect(mockFetchNextPage).toHaveBeenCalledTimes(1);
 
     vi.advanceTimersByTime(100);
 
@@ -156,6 +149,7 @@ describe('useInfinityScroll', () => {
       [{ isIntersecting: true } as IntersectionObserverEntry],
       {} as IntersectionObserver
     );
+    expect(mockFetchNextPage).toHaveBeenCalledTimes(1);
 
     vi.advanceTimersByTime(100);
 
@@ -163,18 +157,25 @@ describe('useInfinityScroll', () => {
       [{ isIntersecting: true } as IntersectionObserverEntry],
       {} as IntersectionObserver
     );
+    expect(mockFetchNextPage).toHaveBeenCalledTimes(1);
 
     vi.advanceTimersByTime(300);
 
-    expect(mockFetchNextPage).toHaveBeenCalledTimes(1);
+    intersectionCallback(
+      [{ isIntersecting: true } as IntersectionObserverEntry],
+      {} as IntersectionObserver
+    );
+    expect(mockFetchNextPage).toHaveBeenCalledTimes(2);
 
+    vi.advanceTimersByTime(100);
+
+    // 다섯 번째 호출 - throttle 중이므로 무시
     intersectionCallback(
       [{ isIntersecting: true } as IntersectionObserverEntry],
       {} as IntersectionObserver
     );
 
-    vi.advanceTimersByTime(500);
-
+    // 총 두 번 실행
     expect(mockFetchNextPage).toHaveBeenCalledTimes(2);
   });
 });

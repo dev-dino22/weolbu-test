@@ -145,7 +145,7 @@ describe('CourseCardInfinityList 컴포넌트 단위 테스트', () => {
       {} as IntersectionObserver
     );
 
-    vi.advanceTimersByTime(500);
+    vi.advanceTimersByTime(1000);
 
     expect(mockFetchNextPage).toHaveBeenCalledTimes(1);
 
