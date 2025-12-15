@@ -160,6 +160,7 @@ const S = {
     color: ${({ theme }) => theme.PALETTE.gray[70]};
     font: ${({ theme }) => theme.FONTS.body.medium};
     line-height: 1.5;
+    overflow-wrap: break-word;
   `,
 
   InfoSection: styled.div`

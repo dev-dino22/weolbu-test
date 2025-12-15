@@ -1,4 +1,4 @@
-import SignUpForm from '@domains/auth/components/SignupForm';
+import SignUpForm from '@domains/auth/components/SignUpForm';
 import styled from '@emotion/styled';
 
 function SignUpPage() {

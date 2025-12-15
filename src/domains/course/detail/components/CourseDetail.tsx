@@ -144,6 +144,7 @@ const S = {
     font: ${({ theme }) => theme.FONTS.body.medium};
     white-space: pre-wrap;
     line-height: 1.8;
+    overflow-wrap: break-word;
   `,
 
   InfoSection: styled.div`

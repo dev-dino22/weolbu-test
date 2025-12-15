@@ -7,19 +7,13 @@ type Props = {
   params?: CourseListParams;
 };
 
-function CourseCardCheckListContent({ params }: Props) {
-  return (
-    <S.Container>
-      <CourseCardInfinityList params={params} />
-      <BatchEnrollButton />
-    </S.Container>
-  );
-}
-
 function CourseEnroll({ params }: Props) {
   return (
     <CheckCoursesProvider>
-      <CourseCardCheckListContent params={params} />
+      <S.Container>
+        <CourseCardInfinityList params={params} />
+        <BatchEnrollButton />
+      </S.Container>
     </CheckCoursesProvider>
   );
 }

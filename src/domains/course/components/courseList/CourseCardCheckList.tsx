@@ -19,6 +19,36 @@ type ItemProps = {
 function CourseCardCheckList({ pages }: Props) {
   const { selectedCourseIds, toggleSelection } = useCheckCourses();
 
+  const CourseListItem = React.memo(
+    function CourseListItem({ course, isChecked, onToggle }: ItemProps) {
+      return (
+        <S.ItemBox>
+          <S.CheckboxWrapper>
+            <CourseCheckbox
+              courseId={course.id}
+              checked={isChecked}
+              disabled={course.isFull}
+              onToggle={onToggle}
+            />
+          </S.CheckboxWrapper>
+          <CourseCard course={course} />
+        </S.ItemBox>
+      );
+    },
+    (prev, next) => {
+      if (
+        !equalByKeys(prev.course, next.course, [
+          'id',
+          'currentStudents',
+          'isFull',
+          'price',
+        ])
+      )
+        return false;
+
+      return true;
+    }
+  );
   return (
     <S.CardList>
       {pages.map((page, pageIndex: number) =>
@@ -38,36 +68,6 @@ function CourseCardCheckList({ pages }: Props) {
     </S.CardList>
   );
 }
-
-const CourseListItem = React.memo(
-  function CourseListItem({ course, isChecked, onToggle }: ItemProps) {
-    return (
-      <S.ItemBox>
-        <S.CheckboxWrapper>
-          <CourseCheckbox
-            courseId={course.id}
-            checked={isChecked}
-            disabled={course.isFull}
-            onToggle={onToggle}
-          />
-        </S.CheckboxWrapper>
-        <CourseCard course={course} />
-      </S.ItemBox>
-    );
-  },
-  (prev, next) => {
-    if (
-      !equalByKeys(prev.course, next.course, [
-        'id',
-        'currentStudents',
-        'isFull',
-        'price',
-      ])
-    )
-      return false;
-    return true;
-  }
-);
 
 export default CourseCardCheckList;
 
