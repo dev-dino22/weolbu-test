@@ -27,6 +27,11 @@
 
 <img width="728" height="270" alt="image" src="https://github.com/user-attachments/assets/2888a245-8469-4761-9db5-665c9a55abf3" />
 
+## 시작하기
+
+```
+npm run build && npm run preview
+```
 
 ## 📝 TODO: 구현 기능
 
