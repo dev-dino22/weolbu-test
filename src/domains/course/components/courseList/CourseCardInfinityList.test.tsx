@@ -1,24 +1,20 @@
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import CourseCardInfinityList from './CourseCardInfinityList';
-import * as coursesApi from '@apis/courses';
+import type { CourseListResponse } from '@apis/courses';
+import * as coursesQueryModule from '@apis/queries/coursesQuery';
 import { ThemeProvider } from '@emotion/react';
 import { THEME } from '@styles/global';
-import type { CourseListResponse } from '@apis/courses';
 import type {
-  UseSuspenseInfiniteQueryResult,
   InfiniteData,
+  UseSuspenseInfiniteQueryResult,
 } from '@tanstack/react-query';
+import { render, screen } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import CourseCardInfinityList from './CourseCardInfinityList';
 
-vi.mock('@apis/courses', async () => {
-  const actual = await vi.importActual('@apis/courses');
-  return {
-    ...actual,
-    coursesQuery: {
-      useCoursesInfiniteQuery: vi.fn(),
-    },
-  };
-});
+vi.mock('@apis/queries/coursesQuery', () => ({
+  coursesQuery: {
+    useCoursesInfiniteQuery: vi.fn(),
+  },
+}));
 
 vi.mock('../../context/CheckCoursesContext', () => ({
   useCheckCourses: () => ({
@@ -65,7 +61,7 @@ describe('CourseCardInfinityList 컴포넌트 단위 테스트', () => {
       });
       mockQueryReturn.hasNextPage = false;
       vi.mocked(
-        coursesApi.coursesQuery.useCoursesInfiniteQuery
+        coursesQueryModule.coursesQuery.useCoursesInfiniteQuery
       ).mockReturnValue(
         mockQueryReturn as unknown as UseSuspenseInfiniteQueryResult<
           InfiniteData<CourseListResponse, unknown>
@@ -123,7 +119,9 @@ describe('CourseCardInfinityList 컴포넌트 단위 테스트', () => {
       isFetchingNextPage: false,
     };
 
-    vi.mocked(coursesApi.coursesQuery.useCoursesInfiniteQuery).mockReturnValue(
+    vi.mocked(
+      coursesQueryModule.coursesQuery.useCoursesInfiniteQuery
+    ).mockReturnValue(
       mockQueryReturn as unknown as UseSuspenseInfiniteQueryResult<
         InfiniteData<CourseListResponse, unknown>
       >
