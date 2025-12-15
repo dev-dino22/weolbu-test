@@ -2,6 +2,7 @@ export const formatter = {
   toPhoneNumber,
   toPrice,
   toDate,
+  toCommaNumber,
 };
 
 function toPhoneNumber(value: string): string {
@@ -32,4 +33,9 @@ function toDate(dateString: string): string {
     month: 'long',
     day: 'numeric',
   });
+}
+
+function toCommaNumber(value: string): string {
+  const numbers = value.replace(/[^\d]/g, '');
+  return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }

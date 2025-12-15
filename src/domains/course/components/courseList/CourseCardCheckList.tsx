@@ -52,8 +52,8 @@ function CourseCardCheckList({ pages }: Props) {
   );
   return (
     <S.CardList>
-      {pages.map((page, pageIndex: number) =>
-        page.content.map((course, courseIndex: number) => {
+      {pages.map((page, pageIndex) =>
+        page.content.map((course, courseIndex) => {
           const key = `${pageIndex}-${course.id}-${courseIndex}`;
           const isChecked = selectedCourseIds.has(course.id);
           return (

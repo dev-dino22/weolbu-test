@@ -1,3 +1,4 @@
+import { formatter } from '@validation/formatters';
 import type { RegisterOptions } from 'react-hook-form';
 
 type CourseFormData = {
@@ -6,11 +7,6 @@ type CourseFormData = {
   instructorName: string;
   maxStudents: number;
   price: number;
-};
-
-const formatNumber = (value: string) => {
-  const numbers = value.replace(/[^\d]/g, '');
-  return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
 export const courseCreateFormRules = {
@@ -65,8 +61,7 @@ export const courseCreateFormRules = {
       return true;
     },
     onChange: e => {
-      const formatted = formatNumber(e.target.value);
-      e.target.value = formatted;
+      e.target.value = formatter.toCommaNumber(e.target.value);
     },
     setValueAs: value => {
       const numValue = String(value).replace(/,/g, '');
