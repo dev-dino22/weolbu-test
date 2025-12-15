@@ -70,19 +70,6 @@ function Modal({
 export default Modal;
 
 const S = {
-  Mini: styled.div`
-    width: 40px;
-    height: 40px;
-    position: fixed;
-    top: 10px;
-    right: 30px;
-
-    border: solid 3px ${({ theme }) => theme.PALETTE.primary[50]};
-
-    background-color: white;
-    border-radius: ${({ theme }) => theme.RADIUS.half};
-    cursor: pointer;
-  `,
   BackDrop: styled.div<{ opened: boolean }>`
     width: 100%;
     height: 100vh;

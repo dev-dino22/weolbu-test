@@ -67,7 +67,6 @@ const S = {
     border-width: 0;
 
     white-space: nowrap;
-    clip: rect(0, 0, 0, 0);
     cursor: pointer;
     user-select: none;
   `,
