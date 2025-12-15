@@ -59,14 +59,14 @@ function CourseCard({ course }: Props) {
           </S.InfoSection>
         </S.Wrapper>
       </S.Container>
-      <ErrorBoundary>
-        <Modal
-          mounted={mounted}
-          opened={opened}
-          onClose={handleUnmountModal}
-          onUnmount={handleUnmountModal}
-          size="lg"
-        >
+      <Modal
+        mounted={mounted}
+        opened={opened}
+        onClose={handleUnmountModal}
+        onUnmount={handleUnmountModal}
+        size="lg"
+      >
+        <ErrorBoundary>
           <Suspense
             fallback={
               <S.LoadingBox>
@@ -76,8 +76,8 @@ function CourseCard({ course }: Props) {
           >
             <CourseDetail courseId={id} />
           </Suspense>
-        </Modal>
-      </ErrorBoundary>
+        </ErrorBoundary>
+      </Modal>
     </>
   );
 }

@@ -54,6 +54,12 @@ export type BatchEnrollRequest = {
   courseIds: number[];
 };
 
+export type EnrollResponse = {
+  enrollmentId: number;
+  courseId: number;
+  courseTitle: string;
+};
+
 export type EnrollmentSuccess = {
   enrollmentId: number;
   courseId: number;
@@ -101,6 +107,17 @@ export const courses = {
     const data = await apiClient.get<Course>(`${BASE_PATH}/${courseId}`);
 
     if (!data) throw new Error('강의 상세 조회 응답이 없습니다');
+
+    return data;
+  },
+
+  postEnroll: async (courseId: number) => {
+    const data = await apiClient.post<EnrollResponse>(
+      `${BASE_PATH}/${courseId}/enroll`,
+      {}
+    );
+
+    if (!data) throw new Error('수강 신청 응답이 없습니다');
 
     return data;
   },
@@ -158,6 +175,16 @@ export const coursesQuery = {
 
     return useMutation({
       mutationFn: (data: CreateCourseRequest) => courses.postCourse(data),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: courseKeys.lists() });
+      },
+    });
+  },
+  useEnrollMutation: () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+      mutationFn: (courseId: number) => courses.postEnroll(courseId),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: courseKeys.lists() });
       },

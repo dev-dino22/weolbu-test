@@ -1,14 +1,13 @@
 import styled from '@emotion/styled';
 import { coursesQuery } from '@apis/courses';
-import Button from '@components/actions/Button';
 import { formatter } from '@validation/formatters';
+import CourseEnrollButton from './CourseEnrollButton';
 
 type Props = {
   courseId: number;
-  onEnrollClick?: (courseId: number) => void;
 };
 
-function CourseDetail({ courseId, onEnrollClick }: Props) {
+function CourseDetail({ courseId }: Props) {
   const { data: course } = coursesQuery.useCourseDetailSuspenseQuery(courseId);
 
   return (
@@ -20,55 +19,49 @@ function CourseDetail({ courseId, onEnrollClick }: Props) {
         </S.TitleSection>
         <S.Price>{formatter.toPrice(course.price)}원</S.Price>
       </S.Header>
+      <S.Wrapper>
+        {course.description && (
+          <S.DescriptionSection>
+            <S.SectionTitle>강의 소개</S.SectionTitle>
+            <S.Description>{course.description}</S.Description>
+          </S.DescriptionSection>
+        )}
 
-      {course.description && (
-        <S.DescriptionSection>
-          <S.SectionTitle>강의 소개</S.SectionTitle>
-          <S.Description>{course.description}</S.Description>
-        </S.DescriptionSection>
-      )}
+        <S.InfoSection>
+          <S.SectionTitle>강의 정보</S.SectionTitle>
+          <S.InfoGrid>
+            <S.InfoItem>
+              <S.InfoLabel>강사</S.InfoLabel>
+              <S.InfoValue>{course.instructorName}</S.InfoValue>
+            </S.InfoItem>
 
-      <S.InfoSection>
-        <S.SectionTitle>강의 정보</S.SectionTitle>
-        <S.InfoGrid>
-          <S.InfoItem>
-            <S.InfoLabel>강사</S.InfoLabel>
-            <S.InfoValue>{course.instructorName}</S.InfoValue>
-          </S.InfoItem>
+            <S.InfoItem>
+              <S.InfoLabel>수강 인원</S.InfoLabel>
+              <S.InfoValue>
+                <S.CurrentStudents>{course.currentStudents}</S.CurrentStudents>
+                <S.Separator>/</S.Separator>
+                <S.MaxStudents>{course.maxStudents}명</S.MaxStudents>
+              </S.InfoValue>
+            </S.InfoItem>
 
-          <S.InfoItem>
-            <S.InfoLabel>수강 인원</S.InfoLabel>
-            <S.InfoValue>
-              <S.CurrentStudents>{course.currentStudents}</S.CurrentStudents>
-              <S.Separator>/</S.Separator>
-              <S.MaxStudents>{course.maxStudents}명</S.MaxStudents>
-            </S.InfoValue>
-          </S.InfoItem>
+            <S.InfoItem>
+              <S.InfoLabel>잔여 석</S.InfoLabel>
+              <S.InfoValue>
+                <S.AvailableSeats>{course.availableSeats}석</S.AvailableSeats>
+              </S.InfoValue>
+            </S.InfoItem>
 
-          <S.InfoItem>
-            <S.InfoLabel>잔여 석</S.InfoLabel>
-            <S.InfoValue>
-              <S.AvailableSeats>{course.availableSeats}석</S.AvailableSeats>
-            </S.InfoValue>
-          </S.InfoItem>
+            <S.InfoItem>
+              <S.InfoLabel>개설일</S.InfoLabel>
+              <S.InfoValue>{formatter.toDate(course.createdAt)}</S.InfoValue>
+            </S.InfoItem>
+          </S.InfoGrid>
+        </S.InfoSection>
 
-          <S.InfoItem>
-            <S.InfoLabel>개설일</S.InfoLabel>
-            <S.InfoValue>{formatter.toDate(course.createdAt)}</S.InfoValue>
-          </S.InfoItem>
-        </S.InfoGrid>
-      </S.InfoSection>
-
-      {onEnrollClick && (
-        <S.ButtonSection>
-          <Button
-            onClick={() => onEnrollClick(course.id)}
-            disabled={course.isFull}
-          >
-            {course.isFull ? '마감된 강의입니다' : '수강 신청하기'}
-          </Button>
-        </S.ButtonSection>
-      )}
+        <S.ButtonWrapper>
+          <CourseEnrollButton courseId={course.id} isFull={course.isFull} />
+        </S.ButtonWrapper>
+      </S.Wrapper>
     </S.Container>
   );
 }
@@ -79,6 +72,7 @@ const S = {
   Container: styled.div`
     width: 100%;
     max-width: 800px;
+    max-height: 80vh;
     display: flex;
     flex-direction: column;
     gap: ${({ theme }) => theme.GAP.level7};
@@ -88,6 +82,13 @@ const S = {
     padding: ${({ theme }) => theme.PADDING.p8};
 
     background-color: ${({ theme }) => theme.PALETTE.gray[0]};
+  `,
+
+  Wrapper: styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: ${({ theme }) => theme.GAP.level4};
+    overflow-y: auto;
   `,
 
   Header: styled.div`
@@ -204,8 +205,7 @@ const S = {
     color: ${({ theme }) => theme.PALETTE.primary[50]};
   `,
 
-  ButtonSection: styled.div`
-    padding-top: ${({ theme }) => theme.PADDING.p4};
-    border-top: 1px solid ${({ theme }) => theme.PALETTE.gray[10]};
+  ButtonWrapper: styled.div`
+    height: 52px;
   `,
 };
