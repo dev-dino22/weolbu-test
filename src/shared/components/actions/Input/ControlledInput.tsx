@@ -48,7 +48,9 @@ function ControlledInput({
         )}
       </S.InputWrapper>
       {feedbackMessage && (
-        <S.FeedbackMessage error={error}>{feedbackMessage}</S.FeedbackMessage>
+        <S.FeedbackMessage error={error} role="alert" aria-live="polite">
+          {feedbackMessage}
+        </S.FeedbackMessage>
       )}
     </S.Container>
   );
