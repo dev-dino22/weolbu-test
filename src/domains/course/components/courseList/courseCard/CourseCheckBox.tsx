@@ -1,6 +1,9 @@
 import ControlledCheckbox from '@components/actions/Input/ControlledCheckbox';
 import { memo, useCallback } from 'react';
 
+// TODO: 선택한 강의 이미 신청된 강의면 체크 해제되게하거나
+// 그냥 선택 강의 목록 초기화할 트리거..
+
 const CourseCheckbox = memo(
   function CourseCheckbox({
     courseId,

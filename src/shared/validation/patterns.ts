@@ -1,6 +1,3 @@
-/**
- * 애플리케이션 전역에서 사용하는 정규식 패턴 상수
- */
 export const VALIDATION_PATTERNS = {
   /** 이메일 형식: example@domain.com */
   EMAIL: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
