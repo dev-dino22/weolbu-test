@@ -17,7 +17,9 @@ function Header() {
 
   return (
     <S.Container>
-      <S.LogoWrapper onClick={handleLogoClick}>진나영 과제사이트</S.LogoWrapper>
+      <S.LogoWrapper onClick={handleLogoClick} aria-label="홈으로 이동">
+        진나영 과제사이트
+      </S.LogoWrapper>
       <S.ButtonWrapper>
         {loggedIn ? (
           <S.LoginButton onClick={logoutUser}>로그아웃</S.LoginButton>
