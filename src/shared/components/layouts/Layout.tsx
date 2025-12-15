@@ -8,7 +8,7 @@ type Props = {
 function Layout({ children }: Props) {
   return (
     <S.Container>
-      <S.Wrapper>{children}</S.Wrapper>
+      <S.Wrapper role="main">{children}</S.Wrapper>
     </S.Container>
   );
 }
