@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
 import LoginForm from '@domains/auth/components/LoginForm';
+import styled from '@emotion/styled';
 
 function LoginPage() {
   return (
